@@ -69,17 +69,17 @@
                         <table class="table table-bordered mx-3">
                             <thead>
                             <tr>
-                                <th>File type</th>
-                                <th>File format</th>
+                                <th>Quality</th>
+                                <th>Format</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="videoFormat : ${videoFormats}">
-                                <td th:text="${videoFormat.videoQuality()}"></td>
-                                <td th:text="${videoFormat.type()}"></td>
-                                <td class="txt-center">
-                                    <a th:href="${videoFormat.url()}" class="btn btn-success" target="_blank" download><i class="bi bi-download"></i> Download</a>
+                                <td th:text="${videoFormat.qualityLabel()}"></td>
+                                <td th:text="${videoFormat.extension().value()}"></td>
+                                <td class="text-start">
+                                    <a th:href="${videoFormat.url()}" class="btn btn-success"><i class="bi bi-download"></i> Download</a>
                                 </td>
                             </tr>
                             </tbody>
