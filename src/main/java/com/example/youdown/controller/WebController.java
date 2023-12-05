@@ -10,10 +10,7 @@ import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,6 +37,13 @@ public class WebController {
 
         if (data == null || data.isEmpty()) {
             data = videoDownloader.getAllData(videoID);
+
+            // If the data is ever empty, we will send the user to a home page
+            if (data == null || data.isEmpty()) {
+                model.addAttribute("error", "Oops! It seems like the provided link is incorrect. Please check and try again.");
+                return "home";
+            }
+
             HashRamMemory.getInstance().saveData(videoID, data);
         }
 

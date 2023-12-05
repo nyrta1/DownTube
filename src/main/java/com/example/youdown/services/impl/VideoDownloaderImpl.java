@@ -82,6 +82,11 @@ public class VideoDownloaderImpl implements VideoDownloader {
 
         RequestVideoInfo request = new RequestVideoInfo(videoId);
         Response<VideoInfo> response = youtubeDownloader.getVideoInfo(request);
+
+        if (!response.ok()) {
+            return null;
+        }
+
         VideoInfo video = response.data();
 
         List<VideoWithAudioFormat> videoWithAudioFormatList = video.videoWithAudioFormats();

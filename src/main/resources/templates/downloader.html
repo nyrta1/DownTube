@@ -84,7 +84,7 @@
                                 <td th:text="${videoFormat.qualityLabel()}"></td>
                                 <td th:text="${videoFormat.extension().value()}"></td>
                                 <td class="text-start">
-                                    <a th:href="${videoFormat.url()}" class="btn btn-success"><i class="bi bi-download"></i> Download</a>
+                                    <a th:href="${videoFormat.url()}" class="btn btn-success" target="_blank" download><i class="bi bi-download"></i> Download</a>
                                 </td>
                             </tr>
                             </tbody>
@@ -105,7 +105,7 @@
                                 <td th:text="${audioFormat.audioQuality()}"></td>
                                 <td th:text="${audioFormat.extension().value()}"></td>
                                 <td class="text-start">
-                                    <a th:href="${audioFormat.url()}" class="btn btn-success"><i class="bi bi-download"></i> Download</a>
+                                    <a th:href="${audioFormat.url()}" class="btn btn-success" target="_blank" download><i class="bi bi-download"></i> Download</a>
                                 </td>
                             </tr>
                             </tbody>
@@ -126,7 +126,7 @@
                                 <td th:text="${videoNoAudioFormat.qualityLabel()}"></td>
                                 <td th:text="${videoNoAudioFormat.extension().value()}"></td>
                                 <td class="text-start">
-                                    <a th:href="${videoNoAudioFormat.url()}" class="btn btn-success"><i class="bi bi-download"></i> Download</a>
+                                    <a th:href="${videoNoAudioFormat.url()}" class="btn btn-success" target="_blank" download><i class="bi bi-download"></i> Download</a>
                                 </td>
                             </tr>
                             </tbody>

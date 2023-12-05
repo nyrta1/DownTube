@@ -44,8 +44,14 @@
             <!-- DOWNLOADER CONTAINER -->
             <div class="container border rounded py-5">
                 <h1 class="text-center">Download Video and Audio from YouTube</h1>
+                <div th:if="${error}" class="alert alert-danger d-flex align-items-center" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <div>
+                        <span th:text="${error}"></span>
+                    </div>
+                </div>
                 <form th:action="@{/search}" method="get">
-                    <div class="input-group rounded px-5 pt-5">
+                    <div class="input-group rounded px-5 pt-3">
                         <input type="search" class="form-control rounded" name="videoUrl" placeholder="Enter YouTube URL" aria-label="Search" aria-describedby="search-addon" />
                         <span class="input-group-text border-0" id="search-addon">
                                 <button type="submit" class="btn btn-primary">
