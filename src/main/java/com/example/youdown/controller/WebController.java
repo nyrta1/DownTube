@@ -8,6 +8,8 @@ import com.github.kiulian.downloader.model.videos.VideoDetails;
 import com.github.kiulian.downloader.model.videos.formats.VideoFormat;
 import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +33,7 @@ public class WebController {
 
     @GetMapping("search")
     public String search(@RequestParam(value = "videoUrl") String videoUrl, Model model) {
+//        videoDownloader.getPlaylist(videoUrl);
         String videoID = YouTubeLinkExtractor.extractVideoId(videoUrl);
 
         ContainerData data = HashRamMemory.getInstance().getData(videoID);
@@ -52,5 +55,10 @@ public class WebController {
         model.addAttribute("videoNoAudioFormats", data.getVideoFormats());
         model.addAttribute("details", data.getDetails());
         return "downloader";
+    }
+
+    @GetMapping("playlist")
+    public ResponseEntity<String> playlist(Model model) {
+        return new ResponseEntity<>("hello", HttpStatus.OK);
     }
 }

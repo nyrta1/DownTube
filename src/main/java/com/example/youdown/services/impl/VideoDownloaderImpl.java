@@ -3,8 +3,11 @@ package com.example.youdown.services.impl;
 import com.example.youdown.models.ContainerData;
 import com.example.youdown.services.VideoDownloader;
 import com.github.kiulian.downloader.YoutubeDownloader;
+import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;
 import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
 import com.github.kiulian.downloader.downloader.response.Response;
+import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
+import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
 import com.github.kiulian.downloader.model.videos.VideoDetails;
 import com.github.kiulian.downloader.model.videos.VideoInfo;
 import com.github.kiulian.downloader.model.videos.formats.AudioFormat;
@@ -96,5 +99,16 @@ public class VideoDownloaderImpl implements VideoDownloader {
 
         ContainerData containerData = new ContainerData(videoWithAudioFormatList,videoFormatList, audioFormats, videoDetails);
         return containerData;
+    }
+
+    @Override
+    public void getPlaylist(String videoId) {
+        YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
+
+        RequestPlaylistInfo request = new RequestPlaylistInfo(videoId);
+        Response<PlaylistInfo> response = youtubeDownloader.getPlaylistInfo(request);
+        PlaylistInfo playlistInfo = response.data();
+
+        List<PlaylistVideoDetails> list = playlistInfo.videos();
     }
 }

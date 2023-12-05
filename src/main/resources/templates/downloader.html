@@ -62,7 +62,16 @@
                             <img th:src="${details.thumbnails().get(0)}" class="card-img-top" alt="Youtube Downloader Video Image" width="257px" height="193">
                             <div class="card-body">
                                 <h5 th:text="${details.title()}" class="card-title"></h5>
-                                <p class="card-text"><i class="bi bi-eye"></i><small class="text-body-secondary" th:text="' ' + ${details.viewCount()} + ' views'"></small></p> <!-- COUNT OF VIEW --->
+                                <p class="card-text">
+                                    <i class="bi bi-eye"></i>
+                                    <small class="text-body-secondary" th:text="' ' + ${details.viewCount()} + ' views'"></small>
+                                    <br>
+                                    <i class="bi bi-person-bounding-box"></i>
+                                    <small class="text-body-secondary" th:text="' ' + ${details.author()}"></small>
+                                    <br>
+                                    <i class="bi bi-hourglass-split"></i>
+                                    <small class="text-body-secondary" th:text="' ' + ${details.lengthSeconds()} + ' sec'"></small>
+                                </p>
                                 <p class="card-text"><i class="bi bi-info-lg"></i><span> </span><span>  DESCRIPTION:</span></p>
                                 <p class="card-text"><small class="text-body-secondary" th:text="' ' + ${details.description()}"></small></p> <!-- DESCRIPTION OF VIDEO --->
                             </div>
@@ -327,8 +336,18 @@
             $("#nav-link-audio").attr('class', 'nav-link')
             $("#table-video-no-audio").show();
         });
-
-
     });
+</script>
+
+<script>
+    function secondsToMinutes(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+
+        const formattedMinutes = String(minutes).padStart(2, '0');
+        const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+
+        return `${formattedMinutes}:${formattedSeconds}`;
+    }
 </script>
 </html>
