@@ -23,65 +23,8 @@ import java.util.List;
 @Slf4j
 public class VideoDownloaderImpl implements VideoDownloader {
     @Override
-    public List<VideoWithAudioFormat> download(final String videoId) {
-        YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
-
-        RequestVideoInfo request = new RequestVideoInfo(videoId);
-        Response<VideoInfo> response = youtubeDownloader.getVideoInfo(request);
-        VideoInfo video = response.data();
-
-        List<VideoWithAudioFormat> videoFormats = video.videoWithAudioFormats();
-
-        return videoFormats;
-    }
-
-    @Override
-    public String getImage(String videoId) {
-        YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
-
-        RequestVideoInfo request = new RequestVideoInfo(videoId);
-        Response<VideoInfo> response = youtubeDownloader.getVideoInfo(request);
-        VideoInfo video = response.data();
-
-        VideoDetails details = video.details();
-
-        List<String> thumbnails = details.thumbnails();
-        if (!thumbnails.isEmpty()) {
-            return thumbnails.get(0);
-        }
-
-        return null;
-    }
-
-    @Override
-    public String getTitle(String videoId) {
-        YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
-
-        RequestVideoInfo request = new RequestVideoInfo(videoId);
-        Response<VideoInfo> response = youtubeDownloader.getVideoInfo(request);
-        VideoInfo video = response.data();
-
-        VideoDetails details = video.details();
-
-        return details.title();
-    }
-
-    @Override
-    public VideoDetails getFullInfo(String videoId) {
-        YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
-
-        RequestVideoInfo request = new RequestVideoInfo(videoId);
-        Response<VideoInfo> response = youtubeDownloader.getVideoInfo(request);
-        VideoInfo video = response.data();
-
-        VideoDetails details = video.details();
-
-        return details;
-    }
-
-    @Override
     public ContainerData getAllData(String videoId) {
-        log.info("Fetching all data from the library for video ID: {}", videoId);
+        log.info("Fetching all data from the library for dataID: {}", videoId);
         YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
 
         RequestVideoInfo request = new RequestVideoInfo(videoId);

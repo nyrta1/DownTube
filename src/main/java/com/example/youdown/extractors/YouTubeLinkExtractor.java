@@ -31,7 +31,7 @@ public class YouTubeLinkExtractor {
         if (matcher.find()) {
             return matcher.group(1);
         } else {
-            return "Playlist ID not found";
+            return null;
         }
     }
 }
