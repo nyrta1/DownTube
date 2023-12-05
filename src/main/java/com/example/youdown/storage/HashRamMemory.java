@@ -4,7 +4,6 @@ import com.example.youdown.models.ContainerData;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 
 @Slf4j
 public class HashRamMemory {

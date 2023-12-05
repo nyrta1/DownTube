@@ -1,5 +1,6 @@
 package com.example.youdown.controller;
 
+import com.example.youdown.extractors.YouTubeLinkExtractor;
 import com.example.youdown.models.ContainerData;
 import com.example.youdown.services.VideoDownloader;
 import com.example.youdown.storage.HashRamMemory;
@@ -32,16 +33,9 @@ public class WebController {
     }
 
     @GetMapping("search")
-    public String search(@RequestParam(value = "videoUrl") String videoID, Model model) {
-//        List<VideoWithAudioFormat> videoFormats = videoDownloader.download(videoID);
-//        String title = videoDownloader.getTitle(videoID);
-//        String imageUrl = videoDownloader.getImage(videoID);
-//        VideoDetails details = videoDownloader.getFullInfo(videoID);
-//
-//        model.addAttribute("videoFormats", videoFormats);
-//        model.addAttribute("title", title);
-//        model.addAttribute("imageUrl", imageUrl);
-//        model.addAttribute("details", details);
+    public String search(@RequestParam(value = "videoUrl") String videoUrl, Model model) {
+        String videoID = YouTubeLinkExtractor.extractVideoId(videoUrl);
+
         ContainerData data = HashRamMemory.getInstance().getData(videoID);
 
         if (data == null || data.isEmpty()) {
