@@ -22,16 +22,16 @@ public class HashRamMemory {
         ContainerData data = containerDataHashMap.get(videoId);
 
         if (data == null || data.isEmpty()) {
-            log.info("Data not found or empty for video ID: {}", videoId);
+            log.info("Data not found or empty for dataID: {}", videoId);
         } else {
-            log.info("Getting data for video ID: {}", videoId);
+            log.info("Getting data for dataID: {}", videoId);
         }
 
         return data;
     }
 
     public void saveData(final String videoId, final ContainerData containerData) {
-        log.info("Saving data for video ID: {}", videoId);
+        log.info("Saving data for dataID: {}", videoId);
         containerDataHashMap.put(videoId, containerData);
     }
 }

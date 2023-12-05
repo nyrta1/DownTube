@@ -8,15 +8,30 @@ import java.util.regex.Matcher;
 @Slf4j
 public class YouTubeLinkExtractor {
     public static String extractVideoId(String link) {
-        // Regex pattern to match YouTube video IDs in various link formats
-        Pattern pattern = Pattern.compile("(?:(?:youtube\\.com\\S*(?:\\/(?:\\w*\\?v=|embed\\/|v\\/))|youtu\\.be\\/)([\\w\\-]+))(?:\\S+)?");
+        String videoId = null;
+
+        // Regular expression pattern to match YouTube video IDs
+        Pattern pattern = Pattern.compile(
+                "(?:https?://)?(?:www\\.)?(?:youtube\\.com/watch\\?v=|youtu\\.be/|youtube\\.com/watch\\?.*?&v=)?([a-zA-Z0-9_-]{11})"
+        );
+
         Matcher matcher = pattern.matcher(link);
 
         if (matcher.find()) {
-            return matcher.group(1); // Return the matched video ID
+            videoId = matcher.group(1);
+        }
+
+        return videoId;
+    }
+
+    public static String extractPlaylistId(String url) {
+        Pattern pattern = Pattern.compile("(?:watch\\?v=\\w+&list=|playlist\\?list=)?([A-Za-z0-9_-]+)$");
+        Matcher matcher = pattern.matcher(url);
+
+        if (matcher.find()) {
+            return matcher.group(1);
         } else {
-            log.warn("Video ID not found: {}", link);
-            return null;
+            return "Playlist ID not found";
         }
     }
 }

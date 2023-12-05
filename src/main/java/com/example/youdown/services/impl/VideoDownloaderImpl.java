@@ -6,6 +6,7 @@ import com.github.kiulian.downloader.YoutubeDownloader;
 import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;
 import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
 import com.github.kiulian.downloader.downloader.response.Response;
+import com.github.kiulian.downloader.model.playlist.PlaylistDetails;
 import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
 import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
 import com.github.kiulian.downloader.model.videos.VideoDetails;
@@ -102,13 +103,22 @@ public class VideoDownloaderImpl implements VideoDownloader {
     }
 
     @Override
-    public void getPlaylist(String videoId) {
+    public ContainerData getPlaylist(String videoId) {
         YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
 
         RequestPlaylistInfo request = new RequestPlaylistInfo(videoId);
         Response<PlaylistInfo> response = youtubeDownloader.getPlaylistInfo(request);
-        PlaylistInfo playlistInfo = response.data();
 
+        if (!response.ok()) {
+            return null;
+        }
+
+        PlaylistInfo playlistInfo = response.data();
+        PlaylistDetails details = playlistInfo.details();
         List<PlaylistVideoDetails> list = playlistInfo.videos();
+
+        ContainerData containerData = new ContainerData(list, details);
+
+        return containerData;
     }
 }

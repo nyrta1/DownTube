@@ -7,6 +7,8 @@
 
 package com.example.youdown.models;
 
+import com.github.kiulian.downloader.model.playlist.PlaylistDetails;
+import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
 import com.github.kiulian.downloader.model.videos.VideoDetails;
 import com.github.kiulian.downloader.model.videos.formats.AudioFormat;
 import com.github.kiulian.downloader.model.videos.formats.VideoFormat;
@@ -31,11 +33,24 @@ public class ContainerData {
     // video details
     VideoDetails details;
 
+    // FOR PLAYLIST
+
+    // get playlist information
+    List<PlaylistVideoDetails> playlistVideoDetails;
+
+    // playlist details
+    PlaylistDetails playlistDetails;
+
     public ContainerData(List<VideoWithAudioFormat> videoWithAudioFormats, List<VideoFormat> videoFormats, List<AudioFormat> audioFormats, VideoDetails details) {
         this.videoWithAudioFormats = videoWithAudioFormats;
         this.videoFormats = videoFormats;
         this.audioFormats = audioFormats;
         this.details = details;
+    }
+
+    public ContainerData(List<PlaylistVideoDetails> playlistVideoDetails, PlaylistDetails playlistDetails) {
+        this.playlistVideoDetails = playlistVideoDetails;
+        this.playlistDetails = playlistDetails;
     }
 
     public boolean isEmpty() {

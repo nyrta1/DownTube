@@ -33,7 +33,6 @@ public class WebController {
 
     @GetMapping("search")
     public String search(@RequestParam(value = "videoUrl") String videoUrl, Model model) {
-//        videoDownloader.getPlaylist(videoUrl);
         String videoID = YouTubeLinkExtractor.extractVideoId(videoUrl);
 
         ContainerData data = HashRamMemory.getInstance().getData(videoID);
@@ -58,7 +57,32 @@ public class WebController {
     }
 
     @GetMapping("playlist")
-    public ResponseEntity<String> playlist(Model model) {
-        return new ResponseEntity<>("hello", HttpStatus.OK);
+    public String playlist(Model model) {
+        return "home-playlist";
     }
+
+    @GetMapping("playlist/search")
+    public String playlistSearch(@RequestParam(value = "playlistUrl") String playlistUrl, Model model) {
+        String playlistId = YouTubeLinkExtractor.extractPlaylistId(playlistUrl);
+
+        ContainerData data = HashRamMemory.getInstance().getData(playlistId);
+
+        if (data == null) {
+            data = videoDownloader.getPlaylist(playlistId);
+
+            // If the data is ever empty, we will send the user to a home page
+            if (data == null) {
+                model.addAttribute("error", "Oops! It seems like the provided link is incorrect. Please check and try again.");
+                return "home-playlist";
+            }
+
+            HashRamMemory.getInstance().saveData(playlistId, data);
+        }
+
+        model.addAttribute("playlistVideoDetails", data.getPlaylistVideoDetails());
+        model.addAttribute("details", data.getPlaylistDetails());
+
+        return "playlist-downloader";
+    }
+
 }

@@ -13,5 +13,5 @@ public interface VideoDownloader {
     String getTitle(String videoId);
     VideoDetails getFullInfo(String videoId);
     ContainerData getAllData(final String videoId);
-    void getPlaylist(final String videoId);
+    ContainerData getPlaylist(final String videoId);
 }
