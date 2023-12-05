@@ -55,6 +55,84 @@
                     </div>
                 </form>
                 <p class="text-center">By using our service you are accepting our <a class="text-danger mb-5" href="#">Terms of Use</a>.</p>
+
+                <div class="row px-3 mt-5">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="card">
+                            <img th:src="${details.thumbnails().get(0)}" class="card-img-top" alt="Youtube Downloader Video Image" width="257px" height="193">
+                            <div class="card-body">
+                                <h5 th:text="${details.title()}" class="card-title"></h5>
+                                <p class="card-text"><i class="bi bi-eye"></i><small class="text-body-secondary" th:text="' ' + ${details.viewCount()} + ' views'"></small></p> <!-- COUNT OF VIEW --->
+                                <p class="card-text"><i class="bi bi-info-lg"></i><span> </span><span>  DESCRIPTION:</span></p>
+                                <p class="card-text"><small class="text-body-secondary" th:text="' ' + ${details.description()}"></small></p> <!-- DESCRIPTION OF VIDEO --->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-sm-8">
+                        <!--VIDEO FORMAT-->
+                        <h5 class="text-start">VIDEO:</h5>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Quality</th>
+                                <th>Format</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="videoFormat : ${videoFormats}">
+                                <td th:text="${videoFormat.qualityLabel()}"></td>
+                                <td th:text="${videoFormat.extension().value()}"></td>
+                                <td class="text-start">
+                                    <a th:href="${videoFormat.url()}" class="btn btn-success"><i class="bi bi-download"></i> Download</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <!--AUDIO FORMAT-->
+                        <h5 class="text-start">AUDIO:</h5>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Quality</th>
+                                <th>Format</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="audioFormat : ${audioFormats}">
+                                <td th:text="${audioFormat.audioQuality()}"></td>
+                                <td th:text="${audioFormat.extension().value()}"></td>
+                                <td class="text-start">
+                                    <a th:href="${audioFormat.url()}" class="btn btn-success"><i class="bi bi-download"></i> Download</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <!--VIDEO FORMAT WITHOUT AUDIO-->
+                        <h5 class="text-start">VIDEO (NO AUDIO):</h5>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Quality</th>
+                                <th>Format</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="videoNoAudioFormat : ${videoNoAudioFormats}">
+                                <td th:text="${videoNoAudioFormat.qualityLabel()}"></td>
+                                <td th:text="${videoNoAudioFormat.extension().value()}"></td>
+                                <td class="text-start">
+                                    <a th:href="${videoNoAudioFormat.url()}" class="btn btn-success"><i class="bi bi-download"></i> Download</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <!-- DOWNLOADER INFORMATION -->
