@@ -52,11 +52,4 @@ public class ContainerData {
         this.playlistVideoDetails = playlistVideoDetails;
         this.playlistDetails = playlistDetails;
     }
-
-    public boolean isEmpty() {
-        return videoWithAudioFormats.isEmpty() &&
-                videoFormats.isEmpty() &&
-                audioFormats.isEmpty() &&
-                details == null;
-    }
 }

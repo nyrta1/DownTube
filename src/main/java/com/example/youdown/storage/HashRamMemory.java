@@ -21,7 +21,7 @@ public class HashRamMemory {
     public ContainerData getData(final String videoId) {
         ContainerData data = containerDataHashMap.get(videoId);
 
-        if (data == null || data.isEmpty()) {
+        if (data == null) {
             log.info("Data not found or empty for dataID: {}", videoId);
         } else {
             log.info("Getting data for dataID: {}", videoId);

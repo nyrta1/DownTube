@@ -2,6 +2,7 @@ package com.example.youdown.services.impl;
 
 import com.example.youdown.models.ContainerData;
 import com.example.youdown.services.VideoDownloader;
+import com.example.youdown.storage.HashRamMemory;
 import com.github.kiulian.downloader.YoutubeDownloader;
 import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;
 import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
@@ -24,6 +25,11 @@ import java.util.List;
 public class VideoDownloaderImpl implements VideoDownloader {
     @Override
     public ContainerData getAllData(String videoId) {
+        ContainerData dataFromLocalStorage = HashRamMemory.getInstance().getData(videoId);
+        if (dataFromLocalStorage != null) {
+            return dataFromLocalStorage;
+        }
+
         log.info("Fetching all data from the library for dataID: {}", videoId);
         YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
 
@@ -42,14 +48,21 @@ public class VideoDownloaderImpl implements VideoDownloader {
         VideoDetails videoDetails = video.details();
 
         ContainerData containerData = new ContainerData(videoWithAudioFormatList,videoFormatList, audioFormats, videoDetails);
+        HashRamMemory.getInstance().saveData(videoId, containerData);
+
         return containerData;
     }
 
     @Override
-    public ContainerData getPlaylist(String videoId) {
+    public ContainerData getPlaylist(String playlistId) {
+        ContainerData dataFromLocalStorage = HashRamMemory.getInstance().getData(playlistId);
+        if (dataFromLocalStorage != null) {
+            return dataFromLocalStorage;
+        }
+
         YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
 
-        RequestPlaylistInfo request = new RequestPlaylistInfo(videoId);
+        RequestPlaylistInfo request = new RequestPlaylistInfo(playlistId);
         Response<PlaylistInfo> response = youtubeDownloader.getPlaylistInfo(request);
 
         if (!response.ok()) {
@@ -61,6 +74,7 @@ public class VideoDownloaderImpl implements VideoDownloader {
         List<PlaylistVideoDetails> list = playlistInfo.videos();
 
         ContainerData containerData = new ContainerData(list, details);
+        HashRamMemory.getInstance().saveData(playlistId, containerData);
 
         return containerData;
     }
