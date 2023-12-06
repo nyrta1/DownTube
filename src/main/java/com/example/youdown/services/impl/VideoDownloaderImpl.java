@@ -79,4 +79,33 @@ public class VideoDownloaderImpl implements VideoDownloader {
 
         return containerData;
     }
+
+    @Override
+    public ContainerData getChannelInfo(String channelId) {
+        ContainerData dataFromLocalStorage = HashRamMemory.getInstance().getData(channelId);
+
+        if (dataFromLocalStorage != null) {
+            return dataFromLocalStorage;
+        }
+
+        YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
+
+        RequestChannelUploads request = new RequestChannelUploads(channelId);
+        Response<PlaylistInfo> response = youtubeDownloader.getChannelUploads(request);
+
+        if (!response.ok()) {
+            return null;
+        }
+
+        PlaylistInfo playlistInfo = response.data();
+
+        PlaylistDetails details = playlistInfo.details();
+        List<PlaylistVideoDetails> playlistVideoDetailsList = playlistInfo.videos();
+
+        ContainerData containerData = new ContainerData(playlistVideoDetailsList, details);
+        HashRamMemory.getInstance().saveData(channelId, containerData);
+
+        return containerData;
+    }
+
 }

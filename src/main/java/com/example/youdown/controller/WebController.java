@@ -66,4 +66,23 @@ public class WebController {
         return "playlist-downloader";
     }
 
+    @GetMapping("channel")
+    public String channelHomePage(){
+        return "home-channel";
+    }
+
+    @GetMapping("channel/search")
+    public String channelSearch(@RequestParam(value = "channelUrl") String channelUrl, Model model) {
+        ContainerData data = videoDownloader.getChannelInfo(channelUrl);
+
+        if (data == null) {
+            model.addAttribute("error", "Oops! It seems like the provided link is incorrect. Please check and try again.");
+            return "home-channel";
+        }
+
+        model.addAttribute("playlistVideoDetails", data.getPlaylistVideoDetails());
+        model.addAttribute("details", data.getPlaylistDetails());
+
+        return "channel-downloader";
+    }
 }
