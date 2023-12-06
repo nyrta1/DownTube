@@ -67,7 +67,7 @@
                                     <small class="text-body-secondary" th:text="' ' + ${details.author()}"></small>
                                     <br>
                                     <i class="bi bi-hourglass-split"></i>
-                                    <small class="text-body-secondary" th:text="' ' + ${details.lengthSeconds()} + ' sec'"></small>
+                                    <small class="text-body-secondary" th:text="${T(com.example.youdown.extractors.TimeConverter).convertSecondsToFormattedTime(details.lengthSeconds())}"></small>
                                 </p>
                                 <p class="card-text"><i class="bi bi-info-lg"></i><span> </span><span>  DESCRIPTION:</span></p>
                                 <p class="card-text"><small class="text-body-secondary" th:text="' ' + ${details.description()}"></small></p> <!-- DESCRIPTION OF VIDEO --->
@@ -117,7 +117,7 @@
                             <tr th:each="videoFormat : ${videoFormats}">
                                 <td th:text="${videoFormat.qualityLabel()} + ' (' + ${videoFormat.extension().value()} + ')'"></td>
 
-                                <td th:text="${videoFormat.contentLength() != null ? videoFormat.contentLength().doubleValue() div 1024 div 1024 + ' MB' : 'N/A'}"></td>
+                                <td th:text="${T(com.example.youdown.extractors.FileSizeConverter).convertToRoundedMB(videoFormat.contentLength() != null ? videoFormat.contentLength().doubleValue() / 1024 / 1024 : null)}"></td>
 
                                 <td class="text-start">
                                     <a th:href="${videoFormat.url()}" class="btn btn-success" target="_blank" download><i class="bi bi-download"></i> Download</a>
@@ -139,7 +139,7 @@
                             <tr th:each="audioFormat : ${audioFormats}">
                                 <td th:text="${audioFormat.audioQuality()} + ' (' + ${audioFormat.extension().value()} + ')'"></td>
 
-                                <td th:text="${audioFormat.contentLength() != null ? audioFormat.contentLength().doubleValue() div 1024 div 1024 + ' MB' : 'N/A'}"></td>
+                                <td th:text="${T(com.example.youdown.extractors.FileSizeConverter).convertToRoundedMB(audioFormat.contentLength() != null ? audioFormat.contentLength().doubleValue() / 1024 / 1024 : null)}"></td>
 
                                 <td class="text-start">
                                     <a th:href="${audioFormat.url()}" class="btn btn-success" target="_blank" download><i class="bi bi-download"></i> Download</a>
@@ -161,7 +161,7 @@
                             <tr th:each="videoNoAudioFormat : ${videoNoAudioFormats}">
                                 <td th:text="${videoNoAudioFormat.qualityLabel()} + ' (' + ${videoNoAudioFormat.extension().value()} + ')'"></td>
 
-                                <td th:text="${videoNoAudioFormat.contentLength() != null ? videoNoAudioFormat.contentLength().doubleValue() div 1024 div 1024 + ' MB' : 'N/A'}"></td>
+                                <td th:text="${T(com.example.youdown.extractors.FileSizeConverter).convertToRoundedMB(videoNoAudioFormat.contentLength() != null ? videoNoAudioFormat.contentLength().doubleValue() / 1024 / 1024 : null)}"></td>
 
                                 <td class="text-start">
                                     <a th:href="${videoNoAudioFormat.url()}" class="btn btn-success" target="_blank" download><i class="bi bi-download"></i> Download</a>
