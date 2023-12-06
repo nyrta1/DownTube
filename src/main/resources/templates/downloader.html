@@ -44,7 +44,7 @@
             <!-- DOWNLOADER CONTAINER -->
             <div class="container border rounded py-5">
                 <h1 class="text-center">Download Video and Audio from YouTube</h1>
-                <form th:action="@{/search}" method="get">
+                <form th:action="@{/downloader/all}" method="get">
                     <div class="input-group rounded px-5 pt-5">
                         <input type="search" class="form-control rounded" name="videoUrl" placeholder="Enter YouTube URL" aria-label="Search" aria-describedby="search-addon" />
                         <span class="input-group-text border-0" id="search-addon">
@@ -343,17 +343,5 @@
             $("#table-video-no-audio").show();
         });
     });
-</script>
-
-<script>
-    function secondsToMinutes(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-
-        const formattedMinutes = String(minutes).padStart(2, '0');
-        const formattedSeconds = String(remainingSeconds).padStart(2, '0');
-
-        return `${formattedMinutes}:${formattedSeconds}`;
-    }
 </script>
 </html>

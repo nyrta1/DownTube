@@ -1,4 +1,4 @@
-package com.example.youdown.extractors;
+package com.example.youdown.converters;
 
 public class TimeConverter {
     public static String convertSecondsToFormattedTime(int seconds) {

@@ -1,33 +1,36 @@
 package com.example.youdown.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.youdown.extractors.YouTubeLinkExtractor;
 import com.example.youdown.models.ContainerData;
+import com.example.youdown.services.JSONVideoDownloader;
 import com.example.youdown.services.VideoDownloader;
-import com.example.youdown.storage.HashRamMemory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/")
-public class WebController {
+@RequestMapping("/downloader/")
+@Slf4j
+public class DownloaderController {
     private final VideoDownloader videoDownloader;
 
     @Autowired
-    public WebController(VideoDownloader videoDownloader) {
+    public DownloaderController(VideoDownloader videoDownloader) {
         this.videoDownloader = videoDownloader;
     }
 
-    @GetMapping("")
-    public String homePage() {
-        return "home";
-    }
-
-    @GetMapping("search")
+    @GetMapping("all")
     public String search(@RequestParam(value = "videoUrl") String videoUrl, Model model) {
+        log.info("Angular is trying to get data for dataID {}", videoUrl);
         String videoID = YouTubeLinkExtractor.extractVideoId(videoUrl);
 
         ContainerData data = videoDownloader.getAllData(videoID);
@@ -45,11 +48,6 @@ public class WebController {
     }
 
     @GetMapping("playlist")
-    public String playlist(Model model) {
-        return "home-playlist";
-    }
-
-    @GetMapping("playlist/search")
     public String playlistSearch(@RequestParam(value = "playlistUrl") String playlistUrl, Model model) {
         String playlistId = YouTubeLinkExtractor.extractPlaylistId(playlistUrl);
 
@@ -67,11 +65,6 @@ public class WebController {
     }
 
     @GetMapping("channel")
-    public String channelHomePage(){
-        return "home-channel";
-    }
-
-    @GetMapping("channel/search")
     public String channelSearch(@RequestParam(value = "channelUrl") String channelUrl, Model model) {
         ContainerData data = videoDownloader.getChannelInfo(channelUrl);
 

@@ -1,4 +1,4 @@
-package com.example.youdown.extractors;
+package com.example.youdown.converters;
 
 public class FileSizeConverter {
     public static String convertToRoundedMB(Double value) {

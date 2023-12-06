@@ -44,7 +44,7 @@
             <!-- DOWNLOADER CONTAINER -->
             <div class="container border rounded py-5">
                 <h1 class="text-center">Download Video and Audio from YouTube</h1>
-                <form th:action="@{/playlist/search}" method="get">
+                <form th:action="@{/downloader/playlist}" method="get">
                     <div class="input-group rounded px-5 pt-5">
                         <input type="search" class="form-control rounded" name="playlistUrl" placeholder="Enter YouTube Playlist URL" aria-label="Search" aria-describedby="search-addon" />
                         <span class="input-group-text border-0" id="search-addon">
@@ -93,47 +93,7 @@
                                 <td th:text="${playlistVideoDetail.index()}"></td>
                                 <td th:text="${playlistVideoDetail.title()}"></td>
                                 <td class="text-start">
-                                    <a th:href="'http://localhost:8080/search?videoUrl='+${playlistVideoDetail.videoId()}" class="btn btn-success" target="_blank"><i class="bi bi-eye-fill"></i>View</a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <!--AUDIO FORMAT-->
-                        <table id="table-audio" style="display: none;" class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Quality</th>
-                                <th>Format</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="audioFormat : ${audioFormats}">
-                                <td th:text="${audioFormat.audioQuality()}"></td>
-                                <td th:text="${audioFormat.extension().value()}"></td>
-                                <td class="text-start">
-                                    <a th:href="${audioFormat.url()}" class="btn btn-success" target="_blank" download><i class="bi bi-download"></i> Download</a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <!--VIDEO FORMAT WITHOUT AUDIO-->
-                        <table id="table-video-no-audio" style="display: none;" class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Quality</th>
-                                <th>Format</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="videoNoAudioFormat : ${videoNoAudioFormats}">
-                                <td th:text="${videoNoAudioFormat.qualityLabel()}"></td>
-                                <td th:text="${videoNoAudioFormat.extension().value()}"></td>
-                                <td class="text-start">
-                                    <a th:href="${videoNoAudioFormat.url()}" class="btn btn-success" target="_blank" download><i class="bi bi-download"></i> Download</a>
+                                    <a th:href="'http://localhost:8080/downloader/all?videoUrl='+${playlistVideoDetail.videoId()}" class="btn btn-success" target="_blank"><i class="bi bi-eye-fill"></i>View</a>
                                 </td>
                             </tr>
                             </tbody>

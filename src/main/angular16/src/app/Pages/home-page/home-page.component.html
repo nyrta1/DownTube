@@ -1,0 +1,127 @@
+<!-- DOWNLOADER CONTAINER -->
+<div class="container border rounded py-5">
+    <h1 class="text-center">Download Video and Audio from YouTube</h1>
+    <form (ngSubmit)="fetchVideoData()" method="get">
+        <div class="input-group rounded px-5 pt-3">
+            
+        <input type="search" class="form-control rounded" [(ngModel)]="videoUrl" name="videoUrl" placeholder="Enter YouTube URL" aria-label="Search" aria-describedby="search-addon" />
+            <span class="input-group-text border-0" id="search-addon">
+                    <button id="submitButton" type="submit" class="btn btn-primary">
+                        <i class="bi bi-search"></i>
+                    </button>
+            </span>
+        </div>
+    </form>
+    <p class="text-center">By using our service you are accepting our <a class="text-danger mb-5" href="#">Terms of Use</a>.</p>
+
+    <!-- DOWNLOADER CONTAINER -->
+    <div id="tableResult" class="row px-3 mt-5" style="display: none;">
+        <div class="col-lg-4 col-sm-4">
+            <div class="card">
+                <img [src]="details?.thumbnails" class="card-img-top" alt="Youtube Downloader Video Image" width="257px" height="193">
+                <div class="card-body">
+                    <h5 class="card-title">{{details?.title}}</h5>
+                    <p class="card-text">
+                        <i class="bi bi-eye"></i>
+                        <small class="text-body-secondary"> {{details?.viewCount}} views</small>
+                        <br>
+                        <i class="bi bi-person-bounding-box"></i>
+                        <small class="text-body-secondary"> {{details?.author}}</small>
+                        <br>
+                        <i class="bi bi-hourglass-split"></i>
+                        <small class="text-body-secondary"> {{secToMin(details?.lengthSeconds)}}</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-sm-8">
+            <ul class="nav nav-tabs justify-content-start" id="selectTab" role="tablist">
+                <li class="nav-item p-0 active" role="presentation">
+                    <a id="nav-link-video" class="nav-link active" href="#mp4" data-toggle="tab" aria-expanded="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 576 512">
+                            <path fill="currentColor" d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM559.1 99.8c10.4 5.6 16.9 16.4 16.9 28.2V384c0 11.8-6.5 22.6-16.9 28.2s-23 5-32.9-1.6l-96-64L416 337.1V320 192 174.9l14.2-9.5 96-64c9.8-6.5 22.4-7.2 32.9-1.6z"></path>
+                        </svg>
+                        Video
+                    </a>
+                </li>
+                <li class="nav-item p-0" role="presentation">
+                    <a id="nav-link-audio" class="nav-link" href="#audio" data-toggle="tab" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M499.1 6.3c8.1 6 12.9 15.6 12.9 25.7v72V368c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V147L192 223.8V432c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V200 128c0-14.1 9.3-26.6 22.8-30.7l320-96c9.7-2.9 20.2-1.1 28.3 5z"></path>
+                        </svg>
+                        Audio
+                    </a>
+                </li>
+                <li class="nav-item p-0" role="presentation">
+                    <a id="nav-link-video-no-audio" class="nav-link" href="#other" data-toggle="tab" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-plus" viewBox="0 0 16 16">
+                            <path d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5V6z"></path>
+                            <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"></path>
+                        </svg>
+                        VIDEO (NO AUDIO):
+                    </a>
+                </li>
+            </ul>
+            <table id="table-video" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Quality</th>
+                        <th>Size</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let videoFormat of videoFormats">
+                      <td>{{ videoFormat?.qualityLabel }} ({{ videoFormat?.extension }})</td>
+                      <td>{{ kbToMb(videoFormat?.contentLength) }} MB</td>
+                      <td>
+                        <a [href]="videoFormat?.url" class="btn btn-success" target="_blank" download>
+                          <i class="bi bi-download"></i> Download
+                        </a>
+                      </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table id="table-audio" style="display: none;" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Quality</th>
+                        <th>Size</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let audioFormat of audioFormats">
+                      <td>{{ audioFormat?.audioQuality }} ({{ audioFormat?.extension }})</td>
+                      <td>{{ kbToMb(audioFormat?.contentLength) }} MB</td>
+                      <td>
+                        <a [href]="audioFormat?.url" class="btn btn-success" target="_blank" download>
+                          <i class="bi bi-download"></i> Download
+                        </a>
+                      </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table id="table-video-no-audio" style="display: none;" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Quality</th>
+                        <th>Size</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let videoNoAudioFormat of videoNoAudioFormats">
+                      <td>{{ videoNoAudioFormat?.qualityLabel }} ({{ videoNoAudioFormat?.extension}})</td>
+                      <td>{{ kbToMb(videoNoAudioFormat?.contentLength) }} MB</td>
+                      <td>
+                        <a [href]="videoNoAudioFormat?.url" class="btn btn-success" target="_blank" download>
+                          <i class="bi bi-download"></i> Download
+                        </a>
+                      </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
