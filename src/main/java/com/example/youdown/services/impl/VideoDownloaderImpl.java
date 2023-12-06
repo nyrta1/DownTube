@@ -26,12 +26,17 @@ import java.util.List;
 public class VideoDownloaderImpl implements VideoDownloader {
     @Override
     public ContainerData getAllData(String videoId) {
+        if (videoId == null) {
+            return null;
+        }
+
         ContainerData dataFromLocalStorage = HashRamMemory.getInstance().getData(videoId);
         if (dataFromLocalStorage != null) {
             return dataFromLocalStorage;
         }
 
         log.info("Fetching all data from the library for dataID: {}", videoId);
+
         YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
 
         RequestVideoInfo request = new RequestVideoInfo(videoId);
@@ -56,6 +61,10 @@ public class VideoDownloaderImpl implements VideoDownloader {
 
     @Override
     public ContainerData getPlaylist(String playlistId) {
+        if (playlistId == null) {
+            return null;
+        }
+
         ContainerData dataFromLocalStorage = HashRamMemory.getInstance().getData(playlistId);
         if (dataFromLocalStorage != null) {
             return dataFromLocalStorage;
@@ -82,6 +91,10 @@ public class VideoDownloaderImpl implements VideoDownloader {
 
     @Override
     public ContainerData getChannelInfo(String channelId) {
+        if (channelId == null) {
+            return null;
+        }
+
         ContainerData dataFromLocalStorage = HashRamMemory.getInstance().getData(channelId);
 
         if (dataFromLocalStorage != null) {
