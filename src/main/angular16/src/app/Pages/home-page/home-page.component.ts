@@ -16,6 +16,7 @@ export class HomePageComponent {
   videoNoAudioFormats!: VideoFormat[];
   details!: VideoDetails;
   videoUrl: string = '';
+  showTable: boolean = false;
 
   constructor(private allDownloaderService: AllDownloaderService) {}
 
@@ -26,6 +27,7 @@ export class HomePageComponent {
         this.audioFormats = data.audioFormats;
         this.videoNoAudioFormats = data.videoFormats;
         this.details = data.details;
+        this.showTable = true;
       },
       (error) => {
         console.error(error);

@@ -12,6 +12,7 @@ export class PlaylistSearchPageComponent {
   playlistVideoDetails!: PlaylistVideoDetails[];
   details!: PlaylistDetails;
   playlistUrl: string = '';
+  showTable: boolean = false;
 
   constructor(private playlistDownloaderService: PlaylistDownloaderService) {}
 
@@ -20,6 +21,7 @@ export class PlaylistSearchPageComponent {
       (data) => {
         this.playlistVideoDetails = data.playlistVideoDetails;
         this.details = data.playlistDetails;
+        this.showTable = true;
       },
       (error) => {
         console.log(error);

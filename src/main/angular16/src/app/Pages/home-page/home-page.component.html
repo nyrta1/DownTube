@@ -15,7 +15,7 @@
     <p class="text-center">By using our service you are accepting our <a class="text-danger mb-5" href="#">Terms of Use</a>.</p>
 
     <!-- DOWNLOADER CONTAINER -->
-    <div id="tableResult" class="row px-3 mt-5" style="display: none;">
+    <div id="tableResult" class="row px-3 mt-5" *ngIf="showTable">
         <div class="col-lg-4 col-sm-4">
             <div class="card">
                 <img [src]="details!.thumbnails" class="card-img-top" alt="Youtube Downloader Video Image" width="257px" height="193">

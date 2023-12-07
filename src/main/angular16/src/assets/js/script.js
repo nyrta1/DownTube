@@ -22,10 +22,6 @@ $(document).ready(function () {
         $("#youtubeChannelTag").attr('class', 'nav-link active')
     });
 
-    $("#submitButton").on('click', function() {
-        $("#tableResult").show();
-    })
-
     $("#nav-link-audio").on('click', function(e) {
         e.preventDefault();
         $("#table-video").hide();
