@@ -16,19 +16,28 @@ export class HomePageComponent implements OnInit {
   videoNoAudioFormats!: VideoFormat[];
   details!: VideoDetails;
   videoUrl: string = '';
+
   showTable: boolean = false;
   navbarActive: boolean = false;
+  activeTab: string = 'video';
+
+  dataNotFoundMessage: boolean = false;;
 
   constructor(private allDownloaderService: AllDownloaderService) {}
 
   fetchVideoData(): void {
     this.allDownloaderService.getVideoData(this.videoUrl).subscribe(
       (data) => {
-        this.videoFormats = data.videoWithAudioFormats;
-        this.audioFormats = data.audioFormats;
-        this.videoNoAudioFormats = data.videoFormats;
-        this.details = data.details;
-        this.showTable = true;
+        if (!data || !data.videoWithAudioFormats || !data.audioFormats || !data.videoFormats || !data.details ) {
+          this.showTable = false;
+          this.dataNotFoundMessage = true;
+        } else {
+          this.videoFormats = data.videoWithAudioFormats;
+          this.audioFormats = data.audioFormats;
+          this.videoNoAudioFormats = data.videoFormats;
+          this.details = data.details;
+          this.showTable = true;
+        }
       },
       (error) => {
         console.error(error);
@@ -47,6 +56,11 @@ export class HomePageComponent implements OnInit {
     const formattedSeconds: string = seconds < 10 ? `0${seconds}` : `${seconds}`;
   
     return `${minutes}:${formattedSeconds}`;
+  }
+
+  changeTab(tab: string): void {
+    this.activeTab = tab;
+    console.log(this.activeTab);
   }
   
   ngOnInit(): void {

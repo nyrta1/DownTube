@@ -32,6 +32,10 @@ public class JSONController {
 
         JSONObject jsonObject = jsonVideoDownloader.getJsonData(videoID, RequestData.ALL);
 
+        if (jsonObject == null || jsonObject.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
         return new ResponseEntity<>(jsonObject, HttpStatus.OK);
     }
 
@@ -40,6 +44,10 @@ public class JSONController {
         String playlistId = YouTubeLinkExtractor.extractPlaylistId(playlistUrl);
 
         JSONObject jsonObject = jsonVideoDownloader.getJsonData(playlistId, RequestData.PLAYLIST);
+
+        if (jsonObject == null || jsonObject.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
 
         return new ResponseEntity<>(jsonObject, HttpStatus.OK);
     }

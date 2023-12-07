@@ -106,7 +106,7 @@ public class JSONConverter {
         VideoDetails details = containerData.getDetails();
         JSONObject collectionOfVideoDetails = new JSONObject();
 
-        collectionOfVideoDetails.put("thumbnails", details.thumbnails().get(0));
+        collectionOfVideoDetails.put("thumbnails", details.thumbnails().get((int) Math.sqrt(details.thumbnails().size())));
         collectionOfVideoDetails.put("title", details.title());
         collectionOfVideoDetails.put("viewCount", details.viewCount());
         collectionOfVideoDetails.put("author", details.author());
@@ -152,7 +152,7 @@ public class JSONConverter {
     private static JSONObject createJSONObjectForPlaylistVideoDetails(PlaylistVideoDetails item) {
         JSONObject playlistVideoDetails = new JSONObject();
 
-        playlistVideoDetails.put("thumbnails", item.thumbnails().get(0));
+        playlistVideoDetails.put("thumbnails", item.thumbnails().get((int) Math.sqrt(item.thumbnails().size())));
         playlistVideoDetails.put("index", item.index());
         playlistVideoDetails.put("title", item.title());
         playlistVideoDetails.put("videoId", item.videoId());
