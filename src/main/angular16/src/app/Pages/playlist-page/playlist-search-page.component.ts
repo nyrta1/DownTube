@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { PlaylistDetails } from 'src/app/models/playlist-details';
+import { PlaylistVideoDetails } from 'src/app/models/playlist-video-details';
 import { PlaylistDownloaderService } from 'src/app/services/playlist-downloader/playlist-downloader.service';
 
 @Component({
@@ -7,8 +9,8 @@ import { PlaylistDownloaderService } from 'src/app/services/playlist-downloader/
   styleUrls: ['./playlist-search-page.component.css']
 })
 export class PlaylistSearchPageComponent {
-  playlistVideoDetails!: any[];
-  details!: any;
+  playlistVideoDetails!: PlaylistVideoDetails[];
+  details!: PlaylistDetails;
   playlistUrl: string = '';
 
   constructor(private playlistDownloaderService: PlaylistDownloaderService) {}
@@ -16,7 +18,6 @@ export class PlaylistSearchPageComponent {
   fetchVideoData(): void {
     this.playlistDownloaderService.getPlaylistData(this.playlistUrl).subscribe(
       (data) => {
-        console.log(data);
         this.playlistVideoDetails = data.playlistVideoDetails;
         this.details = data.playlistDetails;
       },

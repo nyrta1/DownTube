@@ -18,18 +18,18 @@
     <div id="tableResult" class="row px-3 mt-5" style="display: none;">
         <div class="col-lg-4 col-sm-4">
             <div class="card">
-                <img [src]="details?.thumbnails" class="card-img-top" alt="Youtube Downloader Video Image" width="257px" height="193">
+                <img [src]="details!.thumbnails" class="card-img-top" alt="Youtube Downloader Video Image" width="257px" height="193">
                 <div class="card-body">
-                    <h5 class="card-title">{{details?.title}}</h5>
+                    <h5 class="card-title">{{details!.title}}</h5>
                     <p class="card-text">
                         <i class="bi bi-eye"></i>
-                        <small class="text-body-secondary"> {{details?.viewCount}} views</small>
+                        <small class="text-body-secondary"> {{details!.viewCount}} views</small>
                         <br>
                         <i class="bi bi-person-bounding-box"></i>
-                        <small class="text-body-secondary"> {{details?.author}}</small>
+                        <small class="text-body-secondary"> {{details!.author}}</small>
                         <br>
                         <i class="bi bi-hourglass-split"></i>
-                        <small class="text-body-secondary"> {{secToMin(details?.lengthSeconds)}}</small>
+                        <small class="text-body-secondary"> {{secToMin(details!.lengthSeconds)}}</small>
                     </p>
                 </div>
             </div>
@@ -72,10 +72,10 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let videoFormat of videoFormats">
-                      <td>{{ videoFormat?.qualityLabel }} ({{ videoFormat?.extension }})</td>
-                      <td>{{ kbToMb(videoFormat?.contentLength) }} MB</td>
+                      <td>{{ videoFormat!.qualityLabel }} ({{ videoFormat!.extension }})</td>
+                      <td>{{ kbToMb(videoFormat!.contentLength) }} MB</td>
                       <td>
-                        <a [href]="videoFormat?.url" class="btn btn-success" target="_blank" download>
+                        <a [href]="videoFormat!.url" class="btn btn-success" target="_blank" download>
                           <i class="bi bi-download"></i> Download
                         </a>
                       </td>
@@ -92,10 +92,10 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let audioFormat of audioFormats">
-                      <td>{{ audioFormat?.audioQuality }} ({{ audioFormat?.extension }})</td>
-                      <td>{{ kbToMb(audioFormat?.contentLength) }} MB</td>
+                      <td>{{ audioFormat!.audioQuality }} ({{ audioFormat!.extension }})</td>
+                      <td>{{ kbToMb(audioFormat!.contentLength) }} MB</td>
                       <td>
-                        <a [href]="audioFormat?.url" class="btn btn-success" target="_blank" download>
+                        <a [href]="audioFormat!.url" class="btn btn-success" target="_blank" download>
                           <i class="bi bi-download"></i> Download
                         </a>
                       </td>
@@ -112,10 +112,10 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let videoNoAudioFormat of videoNoAudioFormats">
-                      <td>{{ videoNoAudioFormat?.qualityLabel }} ({{ videoNoAudioFormat?.extension}})</td>
-                      <td>{{ kbToMb(videoNoAudioFormat?.contentLength) }} MB</td>
+                      <td>{{ videoNoAudioFormat!.qualityLabel }} ({{ videoNoAudioFormat!.extension}})</td>
+                      <td>{{ kbToMb(videoNoAudioFormat!.contentLength) }} MB</td>
                       <td>
-                        <a [href]="videoNoAudioFormat?.url" class="btn btn-success" target="_blank" download>
+                        <a [href]="videoNoAudioFormat!.url" class="btn btn-success" target="_blank" download>
                           <i class="bi bi-download"></i> Download
                         </a>
                       </td>

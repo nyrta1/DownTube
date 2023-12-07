@@ -17,18 +17,18 @@
         <div class="col-lg-4 col-sm-4">
             <div class="card">
                 <!--TO GET IMAGE FROM PLAYLIST IS NOT OPTIMIZED WAY-->
-                <img [src]="playlistVideoDetails[0]?.thumbnails" class="card-img-top" alt="Youtube Downloader Video Image" width="257px" height="193">
+                <img [src]="playlistVideoDetails[0]!.thumbnails" class="card-img-top" alt="Youtube Downloader Video Image" width="257px" height="193">
                 <div class="card-body">
-                    <h5 class="card-title">{{details?.title}}</h5>
+                    <h5 class="card-title">{{details!.title}}</h5>
                     <p class="card-text">
                         <i class="bi bi-eye"></i>
-                        <small class="text-body-secondary"> {{details?.viewCount}} views</small>
+                        <small class="text-body-secondary"> {{details!.viewCount}} views</small>
                         <br>
                         <i class="bi bi-person-bounding-box"></i>
-                        <small class="text-body-secondary"> {{details?.author}}</small>
+                        <small class="text-body-secondary"> {{details!.author}}</small>
                         <br>
                         <i class="bi bi-film"></i>
-                        <small class="text-body-secondary"> {{details?.videoCount}} videos</small>
+                        <small class="text-body-secondary"> {{details!.videoCount}} videos</small>
                     </p>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                     <td>{{playlistVideoDetail.index}}</td>
                     <td>{{playlistVideoDetail.title}}</td>
                     <td class="text-start">
-                        <a [href]="'http://localhost:4200/json/downloader/all?videoUrl=' + playlistVideoDetail.videoId" class="btn btn-success" target="_blank"><i class="bi bi-eye-fill"></i>View</a>
+                        <a [href]="'http://localhost:4200/json/downloader/all!videoUrl=' + playlistVideoDetail.videoId" class="btn btn-success" target="_blank"><i class="bi bi-eye-fill"></i>View</a>
                     </td>
                 </tr>
                 </tbody>

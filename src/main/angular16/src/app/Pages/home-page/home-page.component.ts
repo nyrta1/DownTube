@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { AudioFormat } from 'src/app/models/audio-format';
+import { VideoDetails } from 'src/app/models/video-details';
+import { VideoFormat } from 'src/app/models/video-format';
+import { VideoWithAudioFormat } from 'src/app/models/video-with-audio-format';
 import { AllDownloaderService } from 'src/app/services/all-downloader/all-downloader-service.service';
 
 @Component({
@@ -7,10 +11,10 @@ import { AllDownloaderService } from 'src/app/services/all-downloader/all-downlo
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent {
-  videoFormats!: any[];
-  audioFormats!: any[];
-  videoNoAudioFormats!: any[];
-  details!: any;
+  videoFormats!: VideoWithAudioFormat[];
+  audioFormats!: AudioFormat[];
+  videoNoAudioFormats!: VideoFormat[];
+  details!: VideoDetails;
   videoUrl: string = '';
 
   constructor(private allDownloaderService: AllDownloaderService) {}
@@ -18,7 +22,6 @@ export class HomePageComponent {
   fetchVideoData(): void {
     this.allDownloaderService.getVideoData(this.videoUrl).subscribe(
       (data) => {
-        console.log(data)
         this.videoFormats = data.videoWithAudioFormats;
         this.audioFormats = data.audioFormats;
         this.videoNoAudioFormats = data.videoFormats;
