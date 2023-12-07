@@ -7,7 +7,12 @@ import { ChannelSearchPageComponent } from './Pages/channel-search-page/channel-
 const routes: Routes = [
   {path: 'all', component: HomePageComponent},
   {path: 'playlist', component: PlaylistSearchPageComponent},
-  {path: 'channel', component: ChannelSearchPageComponent}
+  {path: 'channel', component: ChannelSearchPageComponent},
+
+  // REDIRECTOR PART
+
+  // IF THE PAGE IS NOT FOUND (SERVER_STATUS_404), IT WILL BE REDIRECTED TO THE SHARED PAGE
+  {path: '**', redirectTo: '/all'} 
 ];
 
 @NgModule({
