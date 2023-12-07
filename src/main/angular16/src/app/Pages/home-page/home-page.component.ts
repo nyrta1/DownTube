@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AudioFormat } from 'src/app/models/audio-format';
 import { VideoDetails } from 'src/app/models/video-details';
 import { VideoFormat } from 'src/app/models/video-format';
@@ -10,13 +10,14 @@ import { AllDownloaderService } from 'src/app/services/all-downloader/all-downlo
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css']
 })
-export class HomePageComponent {
+export class HomePageComponent implements OnInit {
   videoFormats!: VideoWithAudioFormat[];
   audioFormats!: AudioFormat[];
   videoNoAudioFormats!: VideoFormat[];
   details!: VideoDetails;
   videoUrl: string = '';
   showTable: boolean = false;
+  navbarActive: boolean = false;
 
   constructor(private allDownloaderService: AllDownloaderService) {}
 
@@ -48,4 +49,7 @@ export class HomePageComponent {
     return `${minutes}:${formattedSeconds}`;
   }
   
+  ngOnInit(): void {
+    this.navbarActive = true;
+  }
 }

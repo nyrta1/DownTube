@@ -5,7 +5,7 @@ import { PlaylistSearchPageComponent } from './Pages/playlist-page/playlist-sear
 import { ChannelSearchPageComponent } from './Pages/channel-search-page/channel-search-page.component';
 
 const routes: Routes = [
-  {path: '', component: HomePageComponent},
+  {path: 'all', component: HomePageComponent},
   {path: 'playlist', component: PlaylistSearchPageComponent},
   {path: 'channel', component: ChannelSearchPageComponent}
 ];

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PlaylistDetails } from 'src/app/models/playlist-details';
 import { PlaylistVideoDetails } from 'src/app/models/playlist-video-details';
 import { PlaylistDownloaderService } from 'src/app/services/playlist-downloader/playlist-downloader.service';
@@ -8,11 +8,12 @@ import { PlaylistDownloaderService } from 'src/app/services/playlist-downloader/
   templateUrl: './playlist-search-page.component.html',
   styleUrls: ['./playlist-search-page.component.css']
 })
-export class PlaylistSearchPageComponent {
+export class PlaylistSearchPageComponent implements OnInit {
   playlistVideoDetails!: PlaylistVideoDetails[];
   details!: PlaylistDetails;
   playlistUrl: string = '';
   showTable: boolean = false;
+  navbarActive: boolean = false;
 
   constructor(private playlistDownloaderService: PlaylistDownloaderService) {}
 
@@ -27,5 +28,9 @@ export class PlaylistSearchPageComponent {
         console.log(error);
       }
     )
+  }
+
+  ngOnInit(): void {
+    this.navbarActive = true;
   }
 }
