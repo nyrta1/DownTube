@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@CrossOrigin("http://localhost:4200/")
 @RequestMapping("/json/downloader/")
 @Slf4j
 public class JSONController {

@@ -4,8 +4,8 @@
     <form (ngSubmit)="fetchVideoData()" method="get">
         <div class="input-group rounded px-5 pt-3">
             <input type="search" class="form-control rounded" [(ngModel)]="playlistUrl" name="playlistUrl" placeholder="Enter YouTube Playlist URL" aria-label="Search" aria-describedby="search-addon" />
-            <span class="input-group-text border-0" id="search-addon">
-                    <button id="submitButton" type="submit" class="btn btn-primary">
+            <span class="input-group-text border-0">
+                    <button type="submit" class="btn btn-primary">
                         <i class="bi bi-search"></i>
                     </button>
             </span>
@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <div id="tableResult" class="row px-3 mt-5" *ngIf="showTable">
+    <div class="row px-3 mt-5" *ngIf="showTable">
         <div class="col-lg-4 col-sm-4">
             <div class="card">
                 <!--TO GET IMAGE FROM PLAYLIST IS NOT OPTIMIZED WAY-->
@@ -40,7 +40,7 @@
             </div>
         </div>
         <div class="col-lg-8 col-sm-8">
-            <table id="table-video" class="table table-bordered">
+            <table class="table table-bordered">
                 <thead>
                 <tr>
                     <th>ID</th>

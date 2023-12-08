@@ -10,8 +10,8 @@
     <form (ngSubmit)="fetchVideoData()" method="get">
         <div class="input-group rounded px-5 pt-3">
         <input type="search" class="form-control rounded" [(ngModel)]="videoUrl" name="videoUrl" placeholder="Enter YouTube URL" aria-label="Search" aria-describedby="search-addon" />
-            <span class="input-group-text border-0" id="search-addon">
-                    <button id="submitButton" type="submit" class="btn btn-primary">
+            <span class="input-group-text border-0">
+                    <button type="submit" class="btn btn-primary">
                         <i class="bi bi-search"></i>
                     </button>
             </span>
@@ -26,7 +26,7 @@
     </div>
 
     <!-- DOWNLOADER CONTAINER -->
-    <div id="tableResult" class="row px-3 mt-5" *ngIf="showTable">
+    <div class="row px-3 mt-5" *ngIf="showTable">
         <div class="col-lg-4 col-sm-4">
             <div class="card">
                 <img [src]="details!.thumbnails" class="card-img-top" alt="Youtube Downloader Video Image" width="257px" height="193">
@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="col-lg-8 col-sm-8">
-            <ul class="nav nav-tabs justify-content-start" id="selectTab" role="tablist">
+            <ul class="nav nav-tabs justify-content-start" role="tablist">
                 <li class="nav-item p-0" role="presentation">
                     <a class="nav-link" [class.active]="activeTab === 'video'" data-toggle="tab" aria-expanded="true" (click)="changeTab('video')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 576 512">
@@ -73,7 +73,7 @@
                     </a>
                 </li>
             </ul>
-            <table id="table-video" class="table table-bordered" *ngIf="activeTab === 'video'">
+            <table class="table table-bordered" *ngIf="activeTab === 'video'">
                 <thead>
                     <tr>
                         <th>Quality</th>
@@ -86,14 +86,14 @@
                       <td>{{ videoFormat!.qualityLabel }} ({{ videoFormat!.extension }})</td>
                       <td>{{ kbToMb(videoFormat!.contentLength) }} MB</td>
                       <td>
-                        <a [href]="videoFormat!.url" class="btn btn-success" target="_blank" download>
-                          <i class="bi bi-download"></i> Download
+                        <a [href]="videoFormat!.url" class="btn btn-success" target="_blank">
+                            <i class="bi bi-download"></i> Download
                         </a>
                       </td>
                     </tr>
                 </tbody>
             </table>
-            <table id="table-audio" class="table table-bordered" *ngIf="activeTab === 'audio'">
+            <table class="table table-bordered" *ngIf="activeTab === 'audio'">
                 <thead>
                     <tr>
                         <th>Quality</th>
@@ -106,14 +106,14 @@
                       <td>{{ audioFormat!.audioQuality }} ({{ audioFormat!.extension }})</td>
                       <td>{{ kbToMb(audioFormat!.contentLength) }} MB</td>
                       <td>
-                        <a [href]="audioFormat!.url" class="btn btn-success" target="_blank" download>
+                        <a [href]="audioFormat!.url" class="btn btn-success" target="_blank">
                           <i class="bi bi-download"></i> Download
                         </a>
                       </td>
                     </tr>
                 </tbody>
             </table>
-            <table id="table-video-no-audio" class="table table-bordered" *ngIf="activeTab === 'video-no-audio'">
+            <table class="table table-bordered" *ngIf="activeTab === 'video-no-audio'">
                 <thead>
                     <tr>
                         <th>Quality</th>
@@ -126,7 +126,7 @@
                       <td>{{ videoNoAudioFormat!.qualityLabel }} ({{ videoNoAudioFormat!.extension}})</td>
                       <td>{{ kbToMb(videoNoAudioFormat!.contentLength) }} MB</td>
                       <td>
-                        <a [href]="videoNoAudioFormat!.url" class="btn btn-success" target="_blank" download>
+                        <a [href]="videoNoAudioFormat!.url" class="btn btn-success" target="_blank">
                           <i class="bi bi-download"></i> Download
                         </a>
                       </td>

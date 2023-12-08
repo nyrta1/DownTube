@@ -24,7 +24,10 @@ export class HomePageComponent implements OnInit {
   dataIsLoading: boolean = false;
   dataNotFoundMessage: boolean = false;;
 
-  constructor(private allDownloaderService: AllDownloaderService) {}
+  constructor(
+    private allDownloaderService: AllDownloaderService
+  ) {}
+
 
   fetchVideoData(): void {
     this.dataIsLoading = true;
@@ -65,7 +68,6 @@ export class HomePageComponent implements OnInit {
 
   changeTab(tab: string): void {
     this.activeTab = tab;
-    console.log(this.activeTab);
   }
   
   ngOnInit(): void {
