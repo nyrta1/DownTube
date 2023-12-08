@@ -19,6 +19,12 @@
     </form>
     <p class="text-center">By using our service you are accepting our <a class="text-danger mb-5" href="#">Terms of Use</a>.</p>
 
+    <div class="d-flex justify-content-center my-5" *ngIf="dataIsLoading">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
     <!-- DOWNLOADER CONTAINER -->
     <div id="tableResult" class="row px-3 mt-5" *ngIf="showTable">
         <div class="col-lg-4 col-sm-4">

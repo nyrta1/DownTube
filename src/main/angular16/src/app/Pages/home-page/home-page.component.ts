@@ -21,11 +21,15 @@ export class HomePageComponent implements OnInit {
   navbarActive: boolean = false;
   activeTab: string = 'video';
 
+  dataIsLoading: boolean = false;
   dataNotFoundMessage: boolean = false;;
 
   constructor(private allDownloaderService: AllDownloaderService) {}
 
   fetchVideoData(): void {
+    this.dataIsLoading = true;
+    this.showTable = false;
+    
     this.allDownloaderService.getVideoData(this.videoUrl).subscribe(
       (data) => {
         if (!data || !data.videoWithAudioFormats || !data.audioFormats || !data.videoFormats || !data.details ) {
@@ -38,6 +42,7 @@ export class HomePageComponent implements OnInit {
           this.details = data.details;
           this.showTable = true;
         }
+        this.dataIsLoading = false;
       },
       (error) => {
         console.error(error);

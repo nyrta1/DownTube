@@ -15,14 +15,19 @@ export class PlaylistSearchPageComponent implements OnInit {
   showTable: boolean = false;
   navbarActive: boolean = false;
 
+  dataIsLoading: boolean = false;
+
   constructor(private playlistDownloaderService: PlaylistDownloaderService) {}
 
   fetchVideoData(): void {
+    this.dataIsLoading = true;
     this.playlistDownloaderService.getPlaylistData(this.playlistUrl).subscribe(
       (data) => {
         this.playlistVideoDetails = data.playlistVideoDetails;
         this.details = data.playlistDetails;
         this.showTable = true;
+
+        this.dataIsLoading = false;
       },
       (error) => {
         console.log(error);
