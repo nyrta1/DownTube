@@ -5,4 +5,5 @@ export interface VideoDetails {
     readonly author: string;
     readonly lengthSeconds: number;
     readonly description: string;
+    readonly videoID: string;
 }

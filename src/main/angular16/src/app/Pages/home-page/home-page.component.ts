@@ -4,6 +4,7 @@ import { VideoDetails } from 'src/app/models/video-details';
 import { VideoFormat } from 'src/app/models/video-format';
 import { VideoWithAudioFormat } from 'src/app/models/video-with-audio-format';
 import { AllDownloaderService } from 'src/app/services/all-downloader/all-downloader-service.service';
+import { FileDownloaderService } from 'src/app/services/file-downloader/file-downloader.service';
 
 @Component({
   selector: 'app-home-page',
@@ -11,21 +12,22 @@ import { AllDownloaderService } from 'src/app/services/all-downloader/all-downlo
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent implements OnInit {
-  videoFormats!: VideoWithAudioFormat[];
+  videoWithAudioFormats!: VideoWithAudioFormat[];
   audioFormats!: AudioFormat[];
-  videoNoAudioFormats!: VideoFormat[];
+  videoFormats!: VideoFormat[];
   details!: VideoDetails;
   videoUrl: string = '';
 
   showTable: boolean = false;
   navbarActive: boolean = false;
-  activeTab: string = 'video';
+  activeTab: string = 'video-with-audio';
 
   dataIsLoading: boolean = false;
   dataNotFoundMessage: boolean = false;;
 
   constructor(
-    private allDownloaderService: AllDownloaderService
+    private allDownloaderService: AllDownloaderService,
+    private fileDownloadService: FileDownloaderService
   ) {}
 
 
@@ -39,9 +41,9 @@ export class HomePageComponent implements OnInit {
           this.showTable = false;
           this.dataNotFoundMessage = true;
         } else {
-          this.videoFormats = data.videoWithAudioFormats;
+          this.videoWithAudioFormats = data.videoWithAudioFormats;
           this.audioFormats = data.audioFormats;
-          this.videoNoAudioFormats = data.videoFormats;
+          this.videoFormats = data.videoFormats;
           this.details = data.details;
           this.showTable = true;
         }
@@ -72,5 +74,14 @@ export class HomePageComponent implements OnInit {
   
   ngOnInit(): void {
     this.navbarActive = true;
+  }
+
+  downloadFile(url: string, quality: string, format: string, type: string) {
+    this.fileDownloadService.downloadFile(url, quality, format, type)
+      .subscribe((fileBlob: Blob) => {
+        this.fileDownloadService.saveFile(fileBlob, 'downloaded_file.mp4');
+      }, error => {
+        console.error('Download failed:', error);
+      });
   }
 }

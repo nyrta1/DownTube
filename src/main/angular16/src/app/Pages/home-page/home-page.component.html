@@ -48,7 +48,7 @@
         <div class="col-lg-8 col-sm-8">
             <ul class="nav nav-tabs justify-content-start" role="tablist">
                 <li class="nav-item p-0" role="presentation">
-                    <a class="nav-link" [class.active]="activeTab === 'video'" data-toggle="tab" aria-expanded="true" (click)="changeTab('video')">
+                    <a class="nav-link" [class.active]="activeTab === 'video-with-audio'" data-toggle="tab" aria-expanded="true" (click)="changeTab('video-with-audio')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 576 512">
                             <path fill="currentColor" d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM559.1 99.8c10.4 5.6 16.9 16.4 16.9 28.2V384c0 11.8-6.5 22.6-16.9 28.2s-23 5-32.9-1.6l-96-64L416 337.1V320 192 174.9l14.2-9.5 96-64c9.8-6.5 22.4-7.2 32.9-1.6z"></path>
                         </svg>
@@ -64,7 +64,7 @@
                     </a>
                 </li>
                 <li class="nav-item p-0" role="presentation">
-                    <a class="nav-link" [class.active]="activeTab === 'video-no-audio'" data-toggle="tab" aria-expanded="false" (click)="changeTab('video-no-audio')">
+                    <a class="nav-link" [class.active]="activeTab === 'video'" data-toggle="tab" aria-expanded="false" (click)="changeTab('video')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-plus" viewBox="0 0 16 16">
                             <path d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5V6z"></path>
                             <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"></path>
@@ -73,7 +73,7 @@
                     </a>
                 </li>
             </ul>
-            <table class="table table-bordered" *ngIf="activeTab === 'video'">
+            <table class="table table-bordered" *ngIf="activeTab === 'video-with-audio'">
                 <thead>
                     <tr>
                         <th>Quality</th>
@@ -82,13 +82,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let videoFormat of videoFormats">
-                      <td>{{ videoFormat!.qualityLabel }} ({{ videoFormat!.extension }})</td>
-                      <td>{{ kbToMb(videoFormat!.contentLength) }} MB</td>
+                    <tr *ngFor="let videoWithAudioFormat of videoWithAudioFormats">
+                      <td>{{ videoWithAudioFormat!.qualityLabel }} ({{ videoWithAudioFormat!.extension }})</td>
+                      <td>{{ kbToMb(videoWithAudioFormat!.contentLength) }} MB</td>
                       <td>
-                        <a [href]="videoFormat!.url" class="btn btn-success" target="_blank">
+                        <a (click)="downloadFile(details!.videoID, videoWithAudioFormat!.qualityLabel, videoWithAudioFormat!.extension, 'video-with-audio')" class="btn btn-success">
                             <i class="bi bi-download"></i> Download
-                        </a>
+                        </a>                        
                       </td>
                     </tr>
                 </tbody>
@@ -106,14 +106,14 @@
                       <td>{{ audioFormat!.audioQuality }} ({{ audioFormat!.extension }})</td>
                       <td>{{ kbToMb(audioFormat!.contentLength) }} MB</td>
                       <td>
-                        <a [href]="audioFormat!.url" class="btn btn-success" target="_blank">
+                        <a (click)="downloadFile(details!.videoID, audioFormat!.audioQuality, audioFormat!.extension, 'audio')" class="btn btn-success">
                           <i class="bi bi-download"></i> Download
                         </a>
                       </td>
                     </tr>
                 </tbody>
             </table>
-            <table class="table table-bordered" *ngIf="activeTab === 'video-no-audio'">
+            <table class="table table-bordered" *ngIf="activeTab === 'video'">
                 <thead>
                     <tr>
                         <th>Quality</th>
@@ -122,11 +122,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let videoNoAudioFormat of videoNoAudioFormats">
-                      <td>{{ videoNoAudioFormat!.qualityLabel }} ({{ videoNoAudioFormat!.extension}})</td>
-                      <td>{{ kbToMb(videoNoAudioFormat!.contentLength) }} MB</td>
+                    <tr *ngFor="let videoFormat of videoFormats">
+                      <td>{{ videoFormat!.qualityLabel }} ({{ videoFormat!.extension}})</td>
+                      <td>{{ kbToMb(videoFormat!.contentLength) }} MB</td>
                       <td>
-                        <a [href]="videoNoAudioFormat!.url" class="btn btn-success" target="_blank">
+                        <a (click)="downloadFile(details!.videoID, videoFormat!.qualityLabel, videoFormat!.extension, 'video')" class="btn btn-success">
                           <i class="bi bi-download"></i> Download
                         </a>
                       </td>

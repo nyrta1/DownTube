@@ -112,6 +112,7 @@ public class JSONConverter {
         collectionOfVideoDetails.put("author", details.author());
         collectionOfVideoDetails.put("lengthSeconds", details.lengthSeconds());
         collectionOfVideoDetails.put("description", details.description());
+        collectionOfVideoDetails.put("videoID", details.videoId());
 
         return collectionOfVideoDetails;
     }
