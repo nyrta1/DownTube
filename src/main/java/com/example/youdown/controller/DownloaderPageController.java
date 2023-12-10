@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/downloader/")
 @Slf4j
-public class DownloaderController {
+public class DownloaderPageController {
     private final VideoDownloader videoDownloader;
 
     @Autowired
-    public DownloaderController(VideoDownloader videoDownloader) {
+    public DownloaderPageController(VideoDownloader videoDownloader) {
         this.videoDownloader = videoDownloader;
     }
 
