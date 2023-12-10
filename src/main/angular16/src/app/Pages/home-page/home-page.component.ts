@@ -79,7 +79,7 @@ export class HomePageComponent implements OnInit {
   downloadFile(url: string, quality: string, format: string, type: string) {
     this.fileDownloadService.downloadFile(url, quality, format, type)
       .subscribe((fileBlob: Blob) => {
-        this.fileDownloadService.saveFile(fileBlob, 'downloaded_file.mp4');
+        this.fileDownloadService.saveFile(fileBlob, `${url}.mp4`);
       }, error => {
         console.error('Download failed:', error);
       });
