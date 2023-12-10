@@ -1,9 +1,11 @@
 package com.example.youdown.services.impl;
 
+import com.example.youdown.constants.Constants;
 import com.example.youdown.enums.IndexingFormat;
 import com.example.youdown.models.ContainerData;
 import com.example.youdown.services.MediaFileDownloader;
 import com.example.youdown.services.VideoDownloader;
+import com.example.youdown.storage.FileFinder;
 import com.github.kiulian.downloader.YoutubeDownloader;
 import com.github.kiulian.downloader.downloader.YoutubeProgressCallback;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
@@ -17,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -32,9 +36,18 @@ public class MediaFileDownloaderImpl implements MediaFileDownloader {
 
     @Override
     public File download(String dataId, String quality, String format, IndexingFormat indexingFormat) {
-        ContainerData containerData = videoDownloader.getAllData(dataId);
-
         String fileName = buildFileName(indexingFormat.getFormatCode(), dataId, quality, format);
+
+        try {
+            File fileFromPackageStorage = FileFinder.findFileInDirectory(Constants.directoryPathForMediaPackage, fileName);
+            if (fileFromPackageStorage != null) {
+                return fileFromPackageStorage;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        ContainerData containerData = videoDownloader.getAllData(dataId);
 
         switch (indexingFormat) {
             case AUDIO -> {
