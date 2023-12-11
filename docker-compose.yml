@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  angular-frontend:
+    container_name: angular-frontend
+    build:
+      context: ./src/main/angular16
+      dockerfile: ./Dockerfile
+    ports:
+      - "4200:4200"
+    depends_on:
+      - spring-boot-backend
+
+  spring-boot-backend:
+    container_name: spring-boot-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - media_volume:/media
+    ports:
+      - "8080:8080"
+
+volumes:
+  media_volume:
