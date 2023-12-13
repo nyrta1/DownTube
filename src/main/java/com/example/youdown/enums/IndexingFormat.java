@@ -3,7 +3,8 @@ package com.example.youdown.enums;
 public enum IndexingFormat {
     AUDIO("A"),
     VIDEO("V"),
-    VIDEO_WITH_AUDIO("VA");
+    VIDEO_WITH_AUDIO("VA"),
+    MERGED_AUDIO_WITH_VIDEO("MVA");
 
     private final String formatCode;
 

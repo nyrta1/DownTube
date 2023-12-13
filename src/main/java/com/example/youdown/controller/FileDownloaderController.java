@@ -99,4 +99,27 @@ public class FileDownloaderController {
                 .contentLength(data.length)
                 .body(resource);
     }
+
+    @GetMapping("merged-audio-with-video")
+    public ResponseEntity<Resource> downloadAudioVideoMergedFile(
+            @RequestParam(value = "url") String url,
+            @RequestParam(value = "quality") String quality,
+            @RequestParam(value = "format") String format
+    ) throws IOException {
+        File response = mediaFileDownloader.download(url, quality, format, IndexingFormat.MERGED_AUDIO_WITH_VIDEO);
+
+        if (Objects.isNull(response)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        byte[] data = FileConverter.convertFileToBytes(response);
+
+        ByteArrayResource resource = new ByteArrayResource(data);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + response.getName() + "\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentLength(data.length)
+                .body(resource);
+    }
 }

@@ -72,6 +72,18 @@
                         VIDEO (NO AUDIO):
                     </a>
                 </li>
+                <li class="nav-item p-0" role="presentation">
+                    <a class="nav-link position-relative" [class.active]="activeTab === 'merged-audio-with-video'" data-toggle="tab" aria-expanded="false" (click)="changeTab('merged-audio-with-video')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-plus" viewBox="0 0 16 16">
+                            <path d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5V6z"></path>
+                            <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"></path>
+                        </svg>
+                        VIDEO (HIGH QUALITY):
+                        <span class="position-absolute top-0 start-80 translate-middle badge rounded-pill bg-success">
+                            beta
+                        </span>
+                    </a>
+                </li>
             </ul>
             <table class="table table-bordered" *ngIf="activeTab === 'video-with-audio'">
                 <thead>
@@ -127,6 +139,26 @@
                       <td>{{ kbToMb(videoFormat!.contentLength) }} MB</td>
                       <td>
                         <a (click)="downloadFile(details!.videoID, videoFormat!.qualityLabel, videoFormat!.extension, 'video')" class="btn btn-success">
+                          <i class="bi bi-download"></i> Download
+                        </a>
+                      </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-bordered" *ngIf="activeTab === 'merged-audio-with-video'">
+                <thead>
+                    <tr>
+                        <th>Quality</th>
+                        <th>Size</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let videoFormat of videoFormats">
+                      <td>{{ videoFormat!.qualityLabel }} ({{ videoFormat!.extension}})</td>
+                      <td>{{ kbToMb(videoFormat!.contentLength) }} MB</td>
+                      <td>
+                        <a (click)="downloadFile(details!.videoID, videoFormat!.qualityLabel, videoFormat!.extension, 'merged-audio-with-video')" class="btn btn-success">
                           <i class="bi bi-download"></i> Download
                         </a>
                       </td>

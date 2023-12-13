@@ -2,6 +2,7 @@ package com.example.youdown.services.impl;
 
 import com.example.youdown.constants.Constants;
 import com.example.youdown.enums.IndexingFormat;
+import com.example.youdown.merger.PythonAudioVideoMerger;
 import com.example.youdown.models.ContainerData;
 import com.example.youdown.services.MediaFileDownloader;
 import com.example.youdown.services.VideoDownloader;
@@ -10,10 +11,12 @@ import com.github.kiulian.downloader.YoutubeDownloader;
 import com.github.kiulian.downloader.downloader.YoutubeProgressCallback;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
 import com.github.kiulian.downloader.downloader.response.Response;
+import com.github.kiulian.downloader.model.Extension;
 import com.github.kiulian.downloader.model.videos.formats.AudioFormat;
 import com.github.kiulian.downloader.model.videos.formats.Format;
 import com.github.kiulian.downloader.model.videos.formats.VideoFormat;
 import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
+import com.github.kiulian.downloader.model.videos.quality.AudioQuality;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,26 +28,15 @@ import java.io.IOException;
 @Slf4j
 public class MediaFileDownloaderImpl implements MediaFileDownloader {
     private final VideoDownloader videoDownloader;
-    private final YoutubeDownloader youtubeDownloader;
 
     @Autowired
     public MediaFileDownloaderImpl(VideoDownloader videoDownloader) {
         this.videoDownloader = videoDownloader;
-        this.youtubeDownloader = new YoutubeDownloader();
     }
 
     @Override
     public File download(String dataId, String quality, String format, IndexingFormat indexingFormat) {
         String fileName = buildFileName(indexingFormat.getFormatCode(), dataId, quality, format);
-
-        try {
-            File fileFromPackageStorage = FileFinder.findFileInDirectory(Constants.directoryPathForMediaPackage, fileName);
-            if (fileFromPackageStorage != null) {
-                return fileFromPackageStorage;
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
         ContainerData containerData = videoDownloader.getAllData(dataId);
 
@@ -76,17 +68,46 @@ public class MediaFileDownloaderImpl implements MediaFileDownloader {
 
                 return downloadRequest(videoWithAudioFormat, fileName);
             }
+            case MERGED_AUDIO_WITH_VIDEO -> {
+                AudioFormat audioFormat = containerData.getAudioFormats().stream()
+                        .filter(audio -> audio.audioQuality().equals(AudioQuality.medium) &&
+                                audio.extension().equals(Extension.M4A))
+                        .findFirst()
+                        .orElse(null);
+
+                String audioFileName = buildFileName(IndexingFormat.AUDIO.getFormatCode(), dataId, AudioQuality.high.name(), Extension.M4A.value());
+
+                VideoFormat videoFormat = containerData.getVideoFormats().stream()
+                        .filter(video -> video.qualityLabel().equals(quality) &&
+                                video.extension().value().equals(format))
+                        .findFirst()
+                        .orElse(null);
+
+                String videoFileName = buildFileName(IndexingFormat.VIDEO.getFormatCode(), dataId, quality, format);
+
+                return downloadMergedRequest(audioFormat, videoFormat, audioFileName, videoFileName, fileName);
+            }
         }
 
         return null;
     }
 
     private File downloadRequest(Format format, String fileName) {
+        try {
+            File fileFromPackageStorage = FileFinder.findFileInDirectory(Constants.directoryPathForMediaPackage, fileName);
+            if (fileFromPackageStorage != null) {
+                return fileFromPackageStorage;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         if (format != null) {
+            YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
             RequestVideoFileDownload request = new RequestVideoFileDownload(format)
-                    .saveTo(new File("media"))
-                    .renameTo(fileName)
-                    .overwriteIfExists(false)
+                                .saveTo(new File("media"))
+                                .renameTo(fileName)
+                                .overwriteIfExists(false)
                     .callback(new YoutubeProgressCallback<File>() {
                         @Override
                         public void onDownloading(int progress) {
@@ -107,6 +128,19 @@ public class MediaFileDownloaderImpl implements MediaFileDownloader {
             return response.data();
         } else {
             log.error("Format meeting criteria not found");
+            return null;
+        }
+    }
+
+    private File downloadMergedRequest(AudioFormat audioFormat, VideoFormat videoFormat, String audioFileName, String videoFileName, String mergedFileName) {
+        File downloadedAudioFile = downloadRequest(audioFormat, audioFileName);
+        File downloadedVideoFile = downloadRequest(videoFormat, videoFileName);
+
+        if (downloadedAudioFile != null && downloadedVideoFile != null) {
+            File mergedFile = PythonAudioVideoMerger.merge(downloadedAudioFile.getPath(), downloadedVideoFile.getPath(), Constants.directoryPathForMediaPackage + "/" +mergedFileName + "." + videoFormat.extension().value());
+            return mergedFile;
+        } else {
+            log.error("Downloaded files are null");
             return null;
         }
     }
