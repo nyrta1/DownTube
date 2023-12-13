@@ -4,8 +4,10 @@ import com.example.youdown.constants.Constants;
 import com.example.youdown.storage.FileFinder;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,19 +28,28 @@ public class FFmpegAudioVideoMerger {
                 "-c:v", "copy",
                 "-c:a", "aac",
                 "-strict", "experimental",
-                outputVideoPath
+                "./media/" + outputVideoPath
         );
 
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         try {
             Process process = processBuilder.start();
 
+            BufferedReader inputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            String line;
+            while ((line = inputReader.readLine()) != null) {
+                log.info(line);
+            }
+            while ((line = errorReader.readLine()) != null) {
+                log.error(line);
+            }
+
             int exitCode = process.waitFor();
 
             if (exitCode == 0) {
                 log.info("Audio and video merge successful!");
-                String filename = outputVideoPath.substring(outputVideoPath.lastIndexOf('/') + 1);
-                return FileFinder.findFileInDirectory(Constants.directoryPathForMediaPackage, filename);
+                return FileFinder.findFileInDirectory(Constants.directoryPathForMediaPackage, outputVideoPath);
             } else {
                 log.error("Audio and video merge failed!");
                 return null;
