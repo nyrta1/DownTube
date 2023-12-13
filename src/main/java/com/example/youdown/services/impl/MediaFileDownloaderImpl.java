@@ -2,7 +2,7 @@ package com.example.youdown.services.impl;
 
 import com.example.youdown.constants.Constants;
 import com.example.youdown.enums.IndexingFormat;
-import com.example.youdown.merger.PythonAudioVideoMerger;
+import com.example.youdown.merger.FFmpegAudioVideoMerger;
 import com.example.youdown.models.ContainerData;
 import com.example.youdown.services.MediaFileDownloader;
 import com.example.youdown.services.VideoDownloader;
@@ -136,8 +136,18 @@ public class MediaFileDownloaderImpl implements MediaFileDownloader {
         File downloadedAudioFile = downloadRequest(audioFormat, audioFileName);
         File downloadedVideoFile = downloadRequest(videoFormat, videoFileName);
 
+        try {
+            File fileFromPackageStorage = FileFinder.findFileInDirectory(Constants.directoryPathForMediaPackage, mergedFileName);
+            if (fileFromPackageStorage != null) {
+                return fileFromPackageStorage;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         if (downloadedAudioFile != null && downloadedVideoFile != null) {
-            File mergedFile = PythonAudioVideoMerger.merge(downloadedAudioFile.getPath(), downloadedVideoFile.getPath(), Constants.directoryPathForMediaPackage + "/" +mergedFileName + "." + videoFormat.extension().value());
+//            Constants.directoryPathForMediaPackage + "/" +
+            File mergedFile = FFmpegAudioVideoMerger.merge(downloadedAudioFile.getPath(), downloadedVideoFile.getPath(), mergedFileName + ".mp4");
             return mergedFile;
         } else {
             log.error("Downloaded files are null");

@@ -10,20 +10,22 @@ import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
-public class PythonAudioVideoMerger {
-    private final static String PYTHON_SCRIPT_PATH = "src/main/python/merge_audio_video.py";
+public class FFmpegAudioVideoMerger {
     public static File merge(
             String audioPath,
             String videoPath,
-            String outputVideoPath ) {
+            String outputVideoPath) {
         log.info("MERGE STARTED");
 
+        // Construct the FFmpeg command
         List<String> command = Arrays.asList(
                 "cmd.exe", "/C", "start",
-                "python",
-                PYTHON_SCRIPT_PATH,
-                audioPath,
-                videoPath,
+                "C:/ffmpeg/bin/ffmpeg",
+                "-i", audioPath,
+                "-i", videoPath,
+                "-c:v", "copy",
+                "-c:a", "aac",
+                "-strict", "experimental",
                 outputVideoPath
         );
 
