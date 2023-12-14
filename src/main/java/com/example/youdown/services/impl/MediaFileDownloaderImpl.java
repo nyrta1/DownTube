@@ -193,7 +193,6 @@ public class MediaFileDownloaderImpl implements MediaFileDownloader {
 
         if (downloadedAudioFile != null && downloadedVideoFile != null) {
             File mergedFile = FFmpegAudioVideoMerger.merge(downloadedAudioFile.getPath(), downloadedVideoFile.getPath(), mergedFileName + ".mp4");
-            System.out.println(mergedFile.getAbsolutePath());
             return mergedFile;
         } else {
             log.error("Downloaded files are null");

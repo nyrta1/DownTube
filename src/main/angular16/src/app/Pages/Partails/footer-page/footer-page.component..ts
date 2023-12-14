@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FooterWithOtherPartsComponent } from './footer-with-other-parts.component';
+import { FooterWithOtherPartsComponent } from './footer-page.component';
 
 describe('FooterWithOtherPartsComponent', () => {
   let component: FooterWithOtherPartsComponent;
