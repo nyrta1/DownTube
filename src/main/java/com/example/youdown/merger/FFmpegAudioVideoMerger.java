@@ -28,7 +28,7 @@ public class FFmpegAudioVideoMerger {
                 "-c:v", "copy",
                 "-c:a", "aac",
                 "-strict", "experimental",
-                "./media/" + outputVideoPath
+                Constants.directoryPathForMediaPackage + outputVideoPath
         );
 
         ProcessBuilder processBuilder = new ProcessBuilder(command);

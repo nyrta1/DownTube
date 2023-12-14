@@ -42,59 +42,84 @@ public class MediaFileDownloaderImpl implements MediaFileDownloader {
 
         switch (indexingFormat) {
             case AUDIO -> {
-                AudioFormat audioFormat = containerData.getAudioFormats().stream()
-                        .filter(audio -> audio.audioQuality().name().equals(quality) &&
-                                audio.extension().value().equals(format))
-                        .findFirst()
-                        .orElse(null);
-
-                return downloadRequest(audioFormat, fileName);
+                return downloadAudio(containerData, quality, format, fileName);
             }
             case VIDEO -> {
-                VideoFormat videoFormat = containerData.getVideoFormats().stream()
-                        .filter(video -> video.qualityLabel().equals(quality) &&
-                                video.extension().value().equals(format))
-                        .findFirst()
-                        .orElse(null);
-
-                return downloadRequest(videoFormat, fileName);
+                return downloadVideo(containerData, quality, format, fileName);
             }
             case VIDEO_WITH_AUDIO -> {
-                VideoWithAudioFormat videoWithAudioFormat = containerData.getVideoWithAudioFormats().stream()
-                        .filter(videoWithAudio -> videoWithAudio.qualityLabel().equals(quality) &&
-                                videoWithAudio.extension().value().equals(format))
-                        .findFirst()
-                        .orElse(null);
-
-                return downloadRequest(videoWithAudioFormat, fileName);
+                return downloadVideoWithAudio(containerData, quality, format, fileName);
             }
             case MERGED_AUDIO_WITH_VIDEO -> {
-                AudioFormat audioFormat = containerData.getAudioFormats().stream()
-                        .filter(audio -> audio.audioQuality().equals(AudioQuality.medium) &&
-                                audio.extension().equals(Extension.M4A))
-                        .findFirst()
-                        .orElse(null);
-
-                String audioFileName = buildFileName(IndexingFormat.AUDIO.getFormatCode(), dataId, AudioQuality.high.name(), Extension.M4A.value());
-
-                VideoFormat videoFormat = containerData.getVideoFormats().stream()
-                        .filter(video -> video.qualityLabel().equals(quality) &&
-                                video.extension().value().equals(format))
-                        .findFirst()
-                        .orElse(null);
-
-                String videoFileName = buildFileName(IndexingFormat.VIDEO.getFormatCode(), dataId, quality, format);
-
-                return downloadMergedRequest(audioFormat, videoFormat, audioFileName, videoFileName, fileName);
+                return downloadMergedAudioWithVideo(containerData, dataId, quality, format, fileName);
             }
         }
 
         return null;
     }
 
+    private File downloadAudio(ContainerData containerData, String quality, String format, String fileName) {
+        AudioFormat audioFormat = getAudioFormat(containerData, quality, format);
+        return downloadRequest(audioFormat, fileName);
+    }
+
+    private File downloadVideo(ContainerData containerData, String quality, String format, String fileName) {
+        VideoFormat videoFormat = getVideoFormat(containerData, quality, format);
+        return downloadRequest(videoFormat, fileName);
+    }
+
+    private File downloadVideoWithAudio(ContainerData containerData, String quality, String format, String fileName) {
+        VideoWithAudioFormat videoWithAudioFormat = getVideoWithAudioFormat(containerData, quality, format);
+        return downloadRequest(videoWithAudioFormat, fileName);
+    }
+
+    private File downloadMergedAudioWithVideo(ContainerData containerData, String dataId, String quality, String format, String fileName) {
+        String audioQualityName = AudioQuality.medium.name();
+        String extensionName = Extension.M4A.value();
+
+        AudioFormat audioFormat = getAudioFormat(containerData, audioQualityName, extensionName);
+        VideoFormat videoFormat = getVideoFormat(containerData, quality, format);
+
+        String audioFileName = buildFileName(IndexingFormat.AUDIO.getFormatCode(), dataId, audioQualityName, extensionName);
+        String videoFileName = buildFileName(IndexingFormat.VIDEO.getFormatCode(), dataId, quality, format);
+
+        return downloadMergedRequest(audioFormat, videoFormat, audioFileName, videoFileName, fileName);
+    }
+
+    private AudioFormat getAudioFormat(ContainerData containerData, String quality, String format) {
+        AudioFormat audioFormat = containerData.getAudioFormats().stream()
+                .filter(audio -> audio.audioQuality().name().equals(quality) &&
+                        audio.extension().value().equals(format))
+                .findFirst()
+                .orElse(null);
+
+        return audioFormat;
+    }
+
+    private VideoFormat getVideoFormat(ContainerData containerData, String quality, String format) {
+        VideoFormat videoFormat = containerData.getVideoFormats().stream()
+                .filter(video -> video.qualityLabel().equals(quality) &&
+                        video.extension().value().equals(format))
+                .findFirst()
+                .orElse(null);
+
+        return videoFormat;
+    }
+
+    private VideoWithAudioFormat getVideoWithAudioFormat(ContainerData containerData, String quality, String format) {
+        VideoWithAudioFormat videoWithAudioFormat = containerData.getVideoWithAudioFormats().stream()
+                .filter(videoWithAudio -> videoWithAudio.qualityLabel().equals(quality) &&
+                        videoWithAudio.extension().value().equals(format))
+                .findFirst()
+                .orElse(null);
+
+        return videoWithAudioFormat;
+    }
+
+
     private File downloadRequest(Format format, String fileName) {
         try {
-            File fileFromPackageStorage = FileFinder.findFileInDirectory(Constants.directoryPathForMediaPackage, fileName);
+            File fileFromPackageStorage = getFileFromPackageStorage(fileName);
             if (fileFromPackageStorage != null) {
                 return fileFromPackageStorage;
             }
@@ -103,33 +128,54 @@ public class MediaFileDownloaderImpl implements MediaFileDownloader {
         }
 
         if (format != null) {
-            YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
-            RequestVideoFileDownload request = new RequestVideoFileDownload(format)
-                                .saveTo(new File("media"))
-                                .renameTo(fileName)
-                                .overwriteIfExists(false)
-                    .callback(new YoutubeProgressCallback<File>() {
-                        @Override
-                        public void onDownloading(int progress) {
-                            System.out.printf("Downloaded %d%%\n", progress);
-                        }
-
-                        @Override
-                        public void onFinished(File videoInfo) {
-                            System.out.println("Finished file: " + videoInfo);
-                        }
-
-                        @Override
-                        public void onError(Throwable throwable) {
-                            System.out.println("Error: " + throwable.getLocalizedMessage());
-                        }
-                    }).async();
-            Response<File> response = youtubeDownloader.downloadVideoFile(request);
-            return response.data();
+            return downloadVideo(format, fileName);
         } else {
-            log.error("Format meeting criteria not found");
+            logErrorFormatNotFound();
             return null;
         }
+    }
+
+    private File getFileFromPackageStorage(String fileName) throws IOException {
+        return FileFinder.findFileInDirectory(Constants.directoryPathForMediaPackage, fileName);
+    }
+
+    private File downloadVideo(Format format, String fileName) {
+        YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
+        RequestVideoFileDownload request = createVideoDownloadRequest(format, fileName);
+        Response<File> response = youtubeDownloader.downloadVideoFile(request);
+        return response.data();
+    }
+
+    private RequestVideoFileDownload createVideoDownloadRequest(Format format, String fileName) {
+        return new RequestVideoFileDownload(format)
+                .saveTo(new File("media"))
+                .renameTo(fileName)
+                .overwriteIfExists(false)
+                .callback(createVideoDownloadCallback())
+                .async();
+    }
+
+    private YoutubeProgressCallback<File> createVideoDownloadCallback() {
+        return new YoutubeProgressCallback<File>() {
+            @Override
+            public void onDownloading(int progress) {
+                System.out.printf("Downloaded %d%%\n", progress);
+            }
+
+            @Override
+            public void onFinished(File videoInfo) {
+                System.out.println("Finished file: " + videoInfo);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                System.out.println("Error: " + throwable.getLocalizedMessage());
+            }
+        };
+    }
+
+    private void logErrorFormatNotFound() {
+        log.error("Format meeting criteria not found");
     }
 
     private File downloadMergedRequest(AudioFormat audioFormat, VideoFormat videoFormat, String audioFileName, String videoFileName, String mergedFileName) {
