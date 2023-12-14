@@ -4,12 +4,14 @@ import { HomePageComponent } from './Pages/home-page/home-page.component';
 import { PlaylistSearchPageComponent } from './Pages/playlist-page/playlist-search-page.component';
 import { ChannelSearchPageComponent } from './Pages/channel-search-page/channel-search-page.component';
 import { TermsOfUsePageComponent } from './Pages/Partails/terms-of-use-page/terms-of-use-page.component';
+import { LoginPageComponent } from './Pages/Partails/login-page/login-page.component';
 
 const routes: Routes = [
   {path: 'all', component: HomePageComponent},
   {path: 'playlist', component: PlaylistSearchPageComponent},
   {path: 'channel', component: ChannelSearchPageComponent},
   {path: 'terms-of-use', component: TermsOfUsePageComponent},
+  {path: 'login', component: LoginPageComponent},
 
   // REDIRECTOR PART
 
