@@ -24,6 +24,7 @@ export class HomePageComponent implements OnInit {
 
   dataIsLoading: boolean = false;
   dataNotFoundMessage: boolean = false;;
+  errorMessage: string= '';
 
   constructor(
     private allDownloaderService: AllDownloaderService,
@@ -46,9 +47,18 @@ export class HomePageComponent implements OnInit {
         this.dataNotFoundMessage = false;
       },
       (error) => {
+        this.dataNotFoundMessage = true;
         this.dataIsLoading = false;
         this.showTable = false;
-        this.dataNotFoundMessage = true;
+        if (error.status === 0) {
+            this.errorMessage = "Oops! It appears that the server isn't responding at the moment. Please check back later or try again in a few moments.";
+        }
+        if (error.status === 404) {
+            this.errorMessage = "Oops! It seems like the provided link is incorrect. Please check and try again.";
+        }
+        if (error.status === 500) {
+            this.errorMessage = "Oops! Something went wrong on our end. We're experiencing some technical difficulties. Please try again later or contact support if the issue persists.";
+        }
       }
     );
   }

@@ -4,6 +4,7 @@
 	--color-2: #D21312;
 	--color-3: #ED2B2A;
 	--color-4: #F15A59;
+    --color-5: #F9F9F9;
 }
 
 .color1 {
@@ -20,4 +21,12 @@
 
 .color4 {
     color: var(--color-4);
+}
+
+.color5 {
+    color: var(--color-5);
+}
+
+.bg-color5 {
+    background-color: var(--color-5);
 }

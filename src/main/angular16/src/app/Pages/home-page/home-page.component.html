@@ -1,5 +1,5 @@
 <!-- DOWNLOADER CONTAINER -->
-<div class="container border rounded py-5">
+<div class="container border rounded-top bg-white py-5">
     <h1 class="text-center">Download Video and Audio from YouTube</h1>
     <form (ngSubmit)="fetchVideoData()" method="GET">
         <div class="input-group rounded px-5 pt-3">
@@ -21,7 +21,7 @@
 
     <div class="d-flex justify-content-center align-items-center mt-5" *ngIf="dataNotFoundMessage">
         <div class="inline-block align-middle">
-            <h2 class="font-weight-normal lead"><strong>Oops!</strong> It seems like the provided link is incorrect. Please check and try again.</h2>
+            <h2 class="font-weight-normal lead">{{errorMessage}}</h2>
         </div>
     </div>
 
