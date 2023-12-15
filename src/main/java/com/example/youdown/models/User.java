@@ -1,6 +1,7 @@
 package com.example.youdown.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,8 +19,10 @@ public class User {
     private Long id;
 
     @Column(unique = true)
+    @NotNull
     private String username;
 
+    @NotNull
     private String password;
 
     @ElementCollection

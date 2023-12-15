@@ -5,6 +5,7 @@ import { PlaylistSearchPageComponent } from './Pages/playlist-page/playlist-sear
 import { ChannelSearchPageComponent } from './Pages/channel-search-page/channel-search-page.component';
 import { TermsOfUsePageComponent } from './Pages/Partails/terms-of-use-page/terms-of-use-page.component';
 import { LoginPageComponent } from './Pages/Partails/login-page/login-page.component';
+import { RegisterPageComponent } from './Pages/Partails/register-page/register-page.component';
 
 const routes: Routes = [
   {path: 'all', component: HomePageComponent},
@@ -12,6 +13,7 @@ const routes: Routes = [
   {path: 'channel', component: ChannelSearchPageComponent},
   {path: 'terms-of-use', component: TermsOfUsePageComponent},
   {path: 'login', component: LoginPageComponent},
+  {path: 'register', component: RegisterPageComponent},
 
   // REDIRECTOR PART
 

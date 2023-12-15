@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { FeaturesPageComponent } from './Pages/Partails/features-page/features-page.component';
 import { TermsOfUsePageComponent } from './Pages/Partails/terms-of-use-page/terms-of-use-page.component';
 import { LoginPageComponent } from './Pages/Partails/login-page/login-page.component';
+import { RegisterPageComponent } from './Pages/Partails/register-page/register-page.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { LoginPageComponent } from './Pages/Partails/login-page/login-page.compo
     ChannelSearchPageComponent,
     FeaturesPageComponent,
     TermsOfUsePageComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    RegisterPageComponent
   ],
   imports: [
     BrowserModule,
