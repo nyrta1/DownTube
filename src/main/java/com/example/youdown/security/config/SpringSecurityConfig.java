@@ -19,8 +19,11 @@ public class SpringSecurityConfig {
         http
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeRequests(auth -> auth
+                        // allow to user get json data
                         .requestMatchers(SecuritySettings.YOUTUBE_PARSED_JSON_DATA_SENDER).permitAll()
+                        // allow to download media files for users
                         .requestMatchers(SecuritySettings.YOUTUBE_MEDIA_FILE_DOWNLOADER_API).permitAll()
+                        // allow to show error pages
                         .requestMatchers(HttpMethod.GET, SecuritySettings.ALLOW_ERROR_PAGES_LIST).permitAll()
                         .anyRequest().authenticated()
                 );
