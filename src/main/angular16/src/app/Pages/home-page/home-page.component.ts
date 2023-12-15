@@ -37,20 +37,18 @@ export class HomePageComponent implements OnInit {
     
     this.allDownloaderService.getVideoData(this.videoUrl).subscribe(
       (data) => {
-        if (!data || !data.videoWithAudioFormats || !data.audioFormats || !data.videoFormats || !data.details ) {
-          this.showTable = false;
-          this.dataNotFoundMessage = true;
-        } else {
-          this.videoWithAudioFormats = data.videoWithAudioFormats;
-          this.audioFormats = data.audioFormats;
-          this.videoFormats = data.videoFormats;
-          this.details = data.details;
-          this.showTable = true;
-        }
+        this.videoWithAudioFormats = data.videoWithAudioFormats;
+        this.audioFormats = data.audioFormats;
+        this.videoFormats = data.videoFormats;
+        this.details = data.details;
+        this.showTable = true;
         this.dataIsLoading = false;
+        this.dataNotFoundMessage = false;
       },
       (error) => {
-        console.error(error);
+        this.dataIsLoading = false;
+        this.showTable = false;
+        this.dataNotFoundMessage = true;
       }
     );
   }

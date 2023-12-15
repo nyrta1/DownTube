@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.youdown.enums.RequestData;
 import com.example.youdown.extractors.YouTubeLinkExtractor;
 import com.example.youdown.services.JSONVideoDownloader;
+import com.github.kiulian.downloader.downloader.response.ResponseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class JSONController {
 
         JSONObject jsonObject = jsonVideoDownloader.getJsonData(videoID, RequestData.ALL);
 
-        if (jsonObject == null || jsonObject.isEmpty()) {
+        if (jsonObject.get("status").equals(ResponseStatus.error)) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
@@ -43,7 +44,7 @@ public class JSONController {
 
         JSONObject jsonObject = jsonVideoDownloader.getJsonData(playlistId, RequestData.PLAYLIST);
 
-        if (jsonObject == null || jsonObject.isEmpty()) {
+        if (jsonObject.get("status").equals(ResponseStatus.error)) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 

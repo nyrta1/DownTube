@@ -7,6 +7,7 @@
 
 package com.example.youdown.models;
 
+import com.github.kiulian.downloader.downloader.response.ResponseStatus;
 import com.github.kiulian.downloader.model.playlist.PlaylistDetails;
 import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
 import com.github.kiulian.downloader.model.videos.VideoDetails;
@@ -41,17 +42,24 @@ public class ContainerData {
     // playlist details
     PlaylistDetails playlistDetails;
 
-    public ContainerData(List<VideoWithAudioFormat> videoWithAudioFormats, List<VideoFormat> videoFormats, List<AudioFormat> audioFormats, VideoDetails details) {
+    // Response status
+    ResponseStatus responseStatus;
+
+    public ContainerData(List<VideoWithAudioFormat> videoWithAudioFormats, List<VideoFormat> videoFormats, List<AudioFormat> audioFormats, VideoDetails details, ResponseStatus responseStatus) {
         this.videoWithAudioFormats = videoWithAudioFormats;
         this.videoFormats = videoFormats;
         this.audioFormats = audioFormats;
         this.details = details;
+        this.responseStatus = responseStatus;
     }
 
-    public ContainerData(List<PlaylistVideoDetails> playlistVideoDetails, PlaylistDetails playlistDetails) {
+    public ContainerData(List<PlaylistVideoDetails> playlistVideoDetails, PlaylistDetails playlistDetails, ResponseStatus responseStatus) {
         this.playlistVideoDetails = playlistVideoDetails;
         this.playlistDetails = playlistDetails;
+        this.responseStatus = responseStatus;
     }
 
-
+    public ContainerData(ResponseStatus responseStatus) {
+        this.responseStatus = responseStatus;
+    }
 }

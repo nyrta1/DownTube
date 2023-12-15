@@ -1,7 +1,7 @@
 <!-- DOWNLOADER CONTAINER -->
 <div class="container border rounded py-5">
     <h1 class="text-center">Download Playlist from YouTube</h1>
-    <form (ngSubmit)="fetchVideoData()" method="get">
+    <form (ngSubmit)="fetchVideoData()" method="GET">
         <div class="input-group rounded px-5 pt-3">
             <input type="search" class="form-control rounded" [(ngModel)]="playlistUrl" name="playlistUrl" placeholder="Enter YouTube Playlist URL" aria-label="Search" aria-describedby="search-addon" />
             <span class="input-group-text border-0">

@@ -10,6 +10,7 @@ import com.github.kiulian.downloader.YoutubeDownloader;
 import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;
 import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
 import com.github.kiulian.downloader.downloader.response.Response;
+import com.github.kiulian.downloader.downloader.response.ResponseStatus;
 import com.github.kiulian.downloader.model.playlist.PlaylistDetails;
 import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
 import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
@@ -47,44 +48,44 @@ public class JSONVideoDownloaderImpl implements JSONVideoDownloader {
             case PLAYLIST -> handlePlaylistRequest(requestId, youtubeDownloader);
         };
 
-        if (containerData != null) {
+        if (containerData.getResponseStatus() == ResponseStatus.completed) {
             HashRamMemory.getInstance().saveData(requestId, containerData);
-            return JSONConverter.containerDataToJSON(containerData);
         }
 
-        return null;
+        return JSONConverter.containerDataToJSON(containerData);
     }
 
     private ContainerData handleVideoRequest(String requestId, YoutubeDownloader youtubeDownloader) {
         RequestVideoInfo request = new RequestVideoInfo(requestId);
         Response<VideoInfo> response = youtubeDownloader.getVideoInfo(request);
+        ResponseStatus responseStatus = response.status();
 
         if (!response.ok()) {
-            return null;
+            return new ContainerData(responseStatus);
         }
 
         VideoInfo video = response.data();
-
         List<VideoWithAudioFormat> videoWithAudioFormatList = video.videoWithAudioFormats();
         List<VideoFormat> videoFormatList = video.videoFormats();
         List<AudioFormat> audioFormats = video.audioFormats();
         VideoDetails videoDetails = video.details();
 
-        return new ContainerData(videoWithAudioFormatList, videoFormatList, audioFormats, videoDetails);
+        return new ContainerData(videoWithAudioFormatList, videoFormatList, audioFormats, videoDetails, responseStatus);
     }
 
     private ContainerData handlePlaylistRequest(String requestId, YoutubeDownloader youtubeDownloader) {
         RequestPlaylistInfo request = new RequestPlaylistInfo(requestId);
         Response<PlaylistInfo> response = youtubeDownloader.getPlaylistInfo(request);
+        ResponseStatus responseStatus = response.status();
 
         if (!response.ok()) {
-            return null;
+            return new ContainerData(responseStatus);
         }
 
         PlaylistInfo playlistInfo = response.data();
         PlaylistDetails details = playlistInfo.details();
         List<PlaylistVideoDetails> list = playlistInfo.videos();
 
-        return new ContainerData(list, details);
+        return new ContainerData(list, details, responseStatus);
     }
 }

@@ -3,6 +3,7 @@ package com.example.youdown.converters;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.youdown.models.ContainerData;
+import com.github.kiulian.downloader.downloader.response.ResponseStatus;
 import com.github.kiulian.downloader.model.playlist.PlaylistDetails;
 import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
 import com.github.kiulian.downloader.model.videos.VideoDetails;
@@ -20,6 +21,7 @@ public class JSONConverter {
         JSONObject collectionOfVideoDetails = extractVideoDetails(containerData);
         JSONArray collectionOfPlaylistVideoDetails = extractPlaylistVideoDetails(containerData);
         JSONObject collectionOfPlaylistDetails = extractPlaylistDetails(containerData);
+        ResponseStatus responseStatus = containerData.getResponseStatus();
 
         if (collectionOfVideoWithAudioFormat != null && !collectionOfVideoWithAudioFormat.isEmpty()) {
             JSONDataObject.put("videoWithAudioFormats", collectionOfVideoWithAudioFormat);
@@ -38,6 +40,9 @@ public class JSONConverter {
         }
         if (collectionOfPlaylistDetails != null && !collectionOfPlaylistDetails.isEmpty()) {
             JSONDataObject.put("playlistDetails", collectionOfPlaylistDetails);
+        }
+        if (responseStatus != null) {
+            JSONDataObject.put("status", responseStatus);
         }
 
         return JSONDataObject;

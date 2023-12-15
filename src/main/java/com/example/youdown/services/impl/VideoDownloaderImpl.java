@@ -8,6 +8,7 @@ import com.github.kiulian.downloader.downloader.request.RequestChannelUploads;
 import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;
 import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
 import com.github.kiulian.downloader.downloader.response.Response;
+import com.github.kiulian.downloader.downloader.response.ResponseStatus;
 import com.github.kiulian.downloader.model.playlist.PlaylistDetails;
 import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
 import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
@@ -41,6 +42,7 @@ public class VideoDownloaderImpl implements VideoDownloader {
 
         RequestVideoInfo request = new RequestVideoInfo(videoId);
         Response<VideoInfo> response = youtubeDownloader.getVideoInfo(request);
+        ResponseStatus responseStatus = response.status();
 
         if (!response.ok()) {
             return null;
@@ -53,8 +55,11 @@ public class VideoDownloaderImpl implements VideoDownloader {
         List<AudioFormat> audioFormats = video.audioFormats();
         VideoDetails videoDetails = video.details();
 
-        ContainerData containerData = new ContainerData(videoWithAudioFormatList,videoFormatList, audioFormats, videoDetails);
-        HashRamMemory.getInstance().saveData(videoId, containerData);
+        ContainerData containerData = new ContainerData(videoWithAudioFormatList,videoFormatList, audioFormats, videoDetails, responseStatus);
+
+        if (containerData.getResponseStatus() == ResponseStatus.completed) {
+            HashRamMemory.getInstance().saveData(videoId, containerData);
+        }
 
         return containerData;
     }
@@ -74,6 +79,7 @@ public class VideoDownloaderImpl implements VideoDownloader {
 
         RequestPlaylistInfo request = new RequestPlaylistInfo(playlistId);
         Response<PlaylistInfo> response = youtubeDownloader.getPlaylistInfo(request);
+        ResponseStatus responseStatus = response.status();
 
         if (!response.ok()) {
             return null;
@@ -83,8 +89,10 @@ public class VideoDownloaderImpl implements VideoDownloader {
         PlaylistDetails details = playlistInfo.details();
         List<PlaylistVideoDetails> list = playlistInfo.videos();
 
-        ContainerData containerData = new ContainerData(list, details);
-        HashRamMemory.getInstance().saveData(playlistId, containerData);
+        ContainerData containerData = new ContainerData(list, details, responseStatus);
+        if (containerData.getResponseStatus() == ResponseStatus.completed) {
+            HashRamMemory.getInstance().saveData(playlistId, containerData);
+        }
 
         return containerData;
     }
@@ -105,6 +113,7 @@ public class VideoDownloaderImpl implements VideoDownloader {
 
         RequestChannelUploads request = new RequestChannelUploads(channelId);
         Response<PlaylistInfo> response = youtubeDownloader.getChannelUploads(request);
+        ResponseStatus responseStatus = response.status();
 
         if (!response.ok()) {
             return null;
@@ -115,8 +124,11 @@ public class VideoDownloaderImpl implements VideoDownloader {
         PlaylistDetails details = playlistInfo.details();
         List<PlaylistVideoDetails> playlistVideoDetailsList = playlistInfo.videos();
 
-        ContainerData containerData = new ContainerData(playlistVideoDetailsList, details);
-        HashRamMemory.getInstance().saveData(channelId, containerData);
+        ContainerData containerData = new ContainerData(playlistVideoDetailsList, details, responseStatus);
+
+        if (containerData.getResponseStatus() == ResponseStatus.completed) {
+            HashRamMemory.getInstance().saveData(channelId, containerData);
+        }
 
         return containerData;
     }
