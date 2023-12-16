@@ -1,4 +1,4 @@
-package com.example.youdown.models;
+package com.example.youdown.enums;
 
 public enum Role {
     ADMIN,
