@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { User } from 'src/app/models/user';
+import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { UserService } from 'src/app/services/user-service/user-service.service';
 
 @Component({
@@ -11,13 +12,15 @@ export class RegisterPageComponent {
     username: string = "";
     password: string = "";
 
-    constructor(private userService: UserService) {}
+    constructor(private userService: UserService, private cryptoService: CryptoService) {}
 
     register() {
-        console.log(this.username);
-        console.log(this.password);
+      const encryptedPassword = this.cryptoService.encrypt(this.password);
 
-        let user = new User(this.username, this.password);
+      console.log(this.username);
+      console.log(encryptedPassword);
+
+      let user = new User(this.username, encryptedPassword);
 
         this.userService.registerUser(user).subscribe(
             (response) => {
