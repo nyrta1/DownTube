@@ -1,11 +1,10 @@
 package com.example.youdown.controller;
 
-import com.example.youdown.converters.FileConverter;
 import com.example.youdown.enums.IndexingFormat;
 import com.example.youdown.services.MediaFileDownloader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -43,14 +43,12 @@ public class FileDownloaderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        byte[] data = FileConverter.convertFileToBytes(response);
-
-        ByteArrayResource resource = new ByteArrayResource(data);
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(response));
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + response.getName() + "\"")
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .contentLength(data.length)
+                .contentLength(resource.contentLength())
                 .body(resource);
     }
 
@@ -66,14 +64,12 @@ public class FileDownloaderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        byte[] data = FileConverter.convertFileToBytes(response);
-
-        ByteArrayResource resource = new ByteArrayResource(data);
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(response));
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + response.getName() + "\"")
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .contentLength(data.length)
+                .contentLength(resource.contentLength())
                 .body(resource);
     }
 
@@ -89,19 +85,17 @@ public class FileDownloaderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        byte[] data = FileConverter.convertFileToBytes(response);
-
-        ByteArrayResource resource = new ByteArrayResource(data);
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(response));
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + response.getName() + "\"")
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .contentLength(data.length)
+                .contentLength(resource.contentLength())
                 .body(resource);
     }
 
     @GetMapping("merged-audio-with-video")
-    public ResponseEntity<Resource> downloadAudioVideoMergedFile(
+        public ResponseEntity<Resource> downloadAudioVideoMergedFile(
             @RequestParam(value = "url") String url,
             @RequestParam(value = "quality") String quality,
             @RequestParam(value = "format") String format
@@ -112,14 +106,12 @@ public class FileDownloaderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        byte[] data = FileConverter.convertFileToBytes(response);
-
-        ByteArrayResource resource = new ByteArrayResource(data);
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(response));
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + response.getName() + "\"")
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .contentLength(data.length)
+                .contentLength(resource.contentLength())
                 .body(resource);
     }
 }
