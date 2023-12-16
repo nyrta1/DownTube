@@ -16,5 +16,10 @@ public class SecuritySettings {
     public final static String[] ALLOW_ERROR_PAGES_LIST = {
             "/error/**"
     };
+
+    public  final static String[] LOGIN_REGISTER_REQUEST_LIST = {
+            "/login",
+            "/register"
+    };
 }
 

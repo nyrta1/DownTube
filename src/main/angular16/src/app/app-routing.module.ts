@@ -4,8 +4,8 @@ import { HomePageComponent } from './Pages/home-page/home-page.component';
 import { PlaylistSearchPageComponent } from './Pages/playlist-page/playlist-search-page.component';
 import { ChannelSearchPageComponent } from './Pages/channel-search-page/channel-search-page.component';
 import { TermsOfUsePageComponent } from './Pages/Partails/terms-of-use-page/terms-of-use-page.component';
-import { LoginPageComponent } from './Pages/Partails/login-page/login-page.component';
-import { RegisterPageComponent } from './Pages/Partails/register-page/register-page.component';
+import { LoginPageComponent } from './Pages/login-page/login-page.component';
+import { RegisterPageComponent } from './Pages/register-page/register-page.component';
 
 const routes: Routes = [
   {path: 'all', component: HomePageComponent},
