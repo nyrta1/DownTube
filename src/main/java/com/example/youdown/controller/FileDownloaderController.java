@@ -1,11 +1,9 @@
 package com.example.youdown.controller;
 
-import com.example.youdown.converters.FileConverter;
 import com.example.youdown.enums.IndexingFormat;
 import com.example.youdown.services.mediafiledownloader.MediaFileDownloader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -44,10 +42,7 @@ public class FileDownloaderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-//        InputStreamResource resource = new InputStreamResource(new FileInputStream(response));
-
-        byte[] fileContent = FileConverter.convertFileToBytes(response);
-        ByteArrayResource resource = new ByteArrayResource(fileContent);
+        FileSystemResource resource = new FileSystemResource(response);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + response.getName() + "\"")
