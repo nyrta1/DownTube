@@ -1,24 +1,24 @@
 package com.example.youdown.mapper;
 
-import com.example.youdown.dto.UserDTO;
+import com.example.youdown.payload.request.LoginRequest;
 import com.example.youdown.enums.Role;
 import com.example.youdown.models.UserEntity;
 
 public class UserMapper {
-    public static UserEntity mapToUser(UserDTO userDTO) {
+    public static UserEntity mapToUser(LoginRequest loginRequest) {
         UserEntity user = new UserEntity();
-        user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
+        user.setUsername(loginRequest.getUsername());
+        user.setPassword(loginRequest.getPassword());
         user.getRoles().add(Role.USER);
 
         return user;
     }
 
-    public static UserDTO mapToUserDtO(UserEntity user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(user.getUsername());
-        userDTO.setPassword(user.getPassword());
+    public static LoginRequest mapToUserDtO(UserEntity user) {
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername(user.getUsername());
+        loginRequest.setPassword(user.getPassword());
 
-        return userDTO;
+        return loginRequest;
     }
 }

@@ -1,9 +1,12 @@
 package com.example.youdown.controller;
 
-import com.example.youdown.dto.UserDTO;
 import com.example.youdown.mapper.UserMapper;
 import com.example.youdown.models.UserEntity;
-import com.example.youdown.services.UserService;
+import com.example.youdown.payload.request.LoginRequest;
+import com.example.youdown.payload.response.JwtResponse;
+import com.example.youdown.security.custom.CustomUserDetailsImpl;
+import com.example.youdown.security.jwt.JwtUtils;
+import com.example.youdown.services.userservice.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,23 +18,27 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    public UserController(UserService userService, AuthenticationManager authenticationManager) {
+    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Object> registerToSystem(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<Object> registerToSystem(@RequestBody LoginRequest loginRequest) {
         try {
-            UserEntity registerUser = UserMapper.mapToUser(userDTO);
+            UserEntity registerUser = UserMapper.mapToUser(loginRequest);
             userService.saveUser(registerUser);
             return new ResponseEntity<>(Map.of("message", "User registered successfully"), HttpStatus.CREATED);
         } catch (Exception e) {
@@ -40,17 +47,36 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> loginToSystem(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> loginToSystem(@RequestBody LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            userDTO.getUsername(),
-                            userDTO.getPassword()));
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return new ResponseEntity<>(Map.of("user", userDTO.toString()), HttpStatus.OK);
+            String jwtToken = jwtUtils.generateJwtToken(authentication);
+
+            CustomUserDetailsImpl userDetails = (CustomUserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(new JwtResponse(jwtToken,
+                                    userDetails.getId(),
+                                    userDetails.getUsername(),
+                                    roles));
         } catch (Exception e) {
-            return new ResponseEntity<>(Map.of("error", "Login failed: " + e.getMessage(), "user", userDTO.toString()), HttpStatus.BAD_REQUEST);
+            return ResponseEntity
+                    .badRequest()
+                    .body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/validate-jwt-token")
+    public ResponseEntity<?> validateJwtToken(@RequestBody JwtResponse jwtResponse) {
+        if (jwtUtils.validateJwtToken(jwtResponse.getToken())) {
+            return ResponseEntity.ok("Token is not expired");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired JWT token");
         }
     }
 }

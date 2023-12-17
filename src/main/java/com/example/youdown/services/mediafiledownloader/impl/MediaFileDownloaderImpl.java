@@ -1,11 +1,11 @@
-package com.example.youdown.services.impl;
+package com.example.youdown.services.mediafiledownloader.impl;
 
 import com.example.youdown.constants.Constants;
 import com.example.youdown.enums.IndexingFormat;
 import com.example.youdown.merger.FFmpegAudioVideoMerger;
 import com.example.youdown.models.ContainerData;
-import com.example.youdown.services.MediaFileDownloader;
-import com.example.youdown.services.VideoDownloader;
+import com.example.youdown.services.mediafiledownloader.MediaFileDownloader;
+import com.example.youdown.services.videodownloader.VideoDownloader;
 import com.example.youdown.storage.FileFinder;
 import com.github.kiulian.downloader.YoutubeDownloader;
 import com.github.kiulian.downloader.downloader.YoutubeProgressCallback;

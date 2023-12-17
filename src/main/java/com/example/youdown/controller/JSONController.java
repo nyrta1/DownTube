@@ -3,7 +3,7 @@ package com.example.youdown.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.youdown.enums.RequestData;
 import com.example.youdown.extractors.YouTubeLinkExtractor;
-import com.example.youdown.services.JSONVideoDownloader;
+import com.example.youdown.services.jsondownloader.JSONVideoDownloader;
 import com.github.kiulian.downloader.downloader.response.ResponseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

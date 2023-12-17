@@ -1,4 +1,4 @@
-package com.example.youdown.dto;
+package com.example.youdown.payload.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class LoginRequest {
     private String username;
     private String password;
 }

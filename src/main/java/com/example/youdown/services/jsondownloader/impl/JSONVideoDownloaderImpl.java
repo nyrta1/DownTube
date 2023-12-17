@@ -1,10 +1,10 @@
-package com.example.youdown.services.impl;
+package com.example.youdown.services.jsondownloader.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.youdown.converters.JSONConverter;
 import com.example.youdown.enums.RequestData;
 import com.example.youdown.models.ContainerData;
-import com.example.youdown.services.JSONVideoDownloader;
+import com.example.youdown.services.jsondownloader.JSONVideoDownloader;
 import com.example.youdown.storage.HashRamMemory;
 import com.github.kiulian.downloader.YoutubeDownloader;
 import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;

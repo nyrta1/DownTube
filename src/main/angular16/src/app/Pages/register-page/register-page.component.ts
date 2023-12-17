@@ -20,18 +20,6 @@ export class RegisterPageComponent {
 
       console.log(this.username);
       console.log(encryptedPassword);
-
-      let user = new User(this.username, encryptedPassword);
-
-        this.userService.registerUser(user).subscribe(
-            (body) => {
-                console.log('Register successful!', body.message);
-                this.router.navigateByUrl('/all');
-            },
-            (error) => {
-                console.error('Register failed:', error.error);
-            }
-        )
     }
 
 }

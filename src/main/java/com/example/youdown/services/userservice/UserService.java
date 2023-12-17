@@ -1,4 +1,4 @@
-package com.example.youdown.services;
+package com.example.youdown.services.userservice;
 
 import com.example.youdown.models.UserEntity;
 

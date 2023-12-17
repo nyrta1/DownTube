@@ -1,7 +1,7 @@
 package com.example.youdown.controller;
 
 import com.example.youdown.enums.IndexingFormat;
-import com.example.youdown.services.MediaFileDownloader;
+import com.example.youdown.services.mediafiledownloader.MediaFileDownloader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;

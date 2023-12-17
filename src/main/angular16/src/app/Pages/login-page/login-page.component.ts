@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginRequest } from 'src/app/models/login-request';
 import { User } from 'src/app/models/user';
+import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
+import { TokenStorageService } from 'src/app/services/token-storage/token-storage.service';
 import { UserService } from 'src/app/services/user-service/user-service.service';
 
 @Component({
@@ -9,32 +12,42 @@ import { UserService } from 'src/app/services/user-service/user-service.service'
   styleUrls: ['./login-page.component.css']
 })
 export class LoginPageComponent implements OnInit {
-    isLogged: boolean = false;
     username: string = "";
     password: string = "";
+    errorMessage: string = "";
+    roles: string[] = [];
+    isLoggedIn: boolean = false;
+    isLoginFailed = false;
 
-    constructor(private userService: UserService, private cryptoService: CryptoService) {}
+    constructor(private authService: AuthService, 
+                private tokenStorage: TokenStorageService, 
+                private cryptoService: CryptoService) {}
+
+    ngOnInit() {
+        if (this.tokenStorage.getToken()) {
+          this.isLoggedIn = true;
+          this.roles = this.tokenStorage.getUser()!.roles;
+        }
+    }
 
     login() {
         const encryptedPassword = this.cryptoService.encrypt(this.password);
+        let loginRequest = new LoginRequest(this.username, encryptedPassword);
 
-        console.log(this.username);
-        console.log(encryptedPassword);
+        this.authService.login(loginRequest).subscribe(
+            (data) => {
+                this.tokenStorage.saveToken(data.accessToken);
+                this.tokenStorage.saveUser(data);
 
-        let user = new User(this.username, encryptedPassword);
-
-        this.userService.loginUser(user).subscribe(
-            (response) => {
-                this.isLogged = true;
-                console.log('Login successful!', response.user);
+                this.isLoginFailed = false;
+                this.isLoggedIn = true;
+                this.roles = this.tokenStorage.getUser()!.roles;
             },
             (error) => {
-                console.error('Login failed:', error.error);
+                console.log(error);
+                this.errorMessage = error.error;
+                this.isLoginFailed = true;
             }
         )
-    }
-
-    ngOnInit(): void {
-        this.isLogged = this.userService.isUserLoggedIn();
     }
 }

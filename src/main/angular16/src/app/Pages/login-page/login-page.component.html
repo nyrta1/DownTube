@@ -1,5 +1,7 @@
 <div class="container-fluid bg-white my-3 p-5 border rounded" style="max-width: 450px;">
-  <h1 *ngIf="isLogged">IS LOGGED!</h1>
+  <h1 *ngIf="isLoggedIn">IS LOGGED!</h1>
+  <h1 *ngIf="isLoginFailed">AUTH FAILED!</h1>
+  <h6 *ngIf="errorMessage">ERROR MESSAGE: {{errorMessage}}</h6>
   <!-- Pills navs -->
   <ul class="nav nav-pills nav-justified mb-3" role="tablist">
     <li class="nav-item" role="presentation">

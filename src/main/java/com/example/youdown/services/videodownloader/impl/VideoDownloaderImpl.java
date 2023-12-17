@@ -1,7 +1,7 @@
-package com.example.youdown.services.impl;
+package com.example.youdown.services.videodownloader.impl;
 
 import com.example.youdown.models.ContainerData;
-import com.example.youdown.services.VideoDownloader;
+import com.example.youdown.services.videodownloader.VideoDownloader;
 import com.example.youdown.storage.HashRamMemory;
 import com.github.kiulian.downloader.YoutubeDownloader;
 import com.github.kiulian.downloader.downloader.request.RequestChannelUploads;

@@ -2,7 +2,7 @@ package com.example.youdown.controller;
 
 import com.example.youdown.extractors.YouTubeLinkExtractor;
 import com.example.youdown.models.ContainerData;
-import com.example.youdown.services.VideoDownloader;
+import com.example.youdown.services.videodownloader.VideoDownloader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

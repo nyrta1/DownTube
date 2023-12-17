@@ -1,9 +1,9 @@
-package com.example.youdown.services.impl;
+package com.example.youdown.services.userservice.impl;
 
 import com.example.youdown.exceptions.UserRegistrationException;
 import com.example.youdown.models.UserEntity;
 import com.example.youdown.repository.UserRepository;
-import com.example.youdown.services.UserService;
+import com.example.youdown.services.userservice.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;

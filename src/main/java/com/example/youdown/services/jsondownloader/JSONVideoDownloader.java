@@ -1,4 +1,4 @@
-package com.example.youdown.services;
+package com.example.youdown.services.jsondownloader;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.youdown.enums.RequestData;

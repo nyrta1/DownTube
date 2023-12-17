@@ -17,9 +17,16 @@ public class SecuritySettings {
             "/error/**"
     };
 
-    public  final static String[] LOGIN_REGISTER_REQUEST_LIST = {
+    public final static String[] LOGIN_REGISTER_REQUEST_LIST = {
             "/login",
-            "/register"
+            "/register",
+            "/validate-jwt-token"
+    };
+
+    public final static String[] AUTH_TEST_LIST = {
+            "/api/test/all",
+            "/api/test/user",
+            "/api/test/admin"
     };
 }
 
