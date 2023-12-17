@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginRequest } from 'src/app/models/login-request';
-import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { TokenStorageService } from 'src/app/services/token-storage/token-storage.service';
-import { UserService } from 'src/app/services/user-service/user-service.service';
 
 @Component({
   selector: 'app-login-page',
@@ -36,12 +34,13 @@ export class LoginPageComponent implements OnInit {
 
         this.authService.login(loginRequest).subscribe(
             (data) => {
-                this.tokenStorage.saveToken(data.accessToken);
+                this.tokenStorage.saveToken(data.token);
                 this.tokenStorage.saveUser(data);
 
                 this.isLoginFailed = false;
                 this.isLoggedIn = true;
                 this.roles = this.tokenStorage.getUser()!.roles;
+                this.reloadPage();
             },
             (error) => {
                 console.log(error);
@@ -49,5 +48,9 @@ export class LoginPageComponent implements OnInit {
                 this.isLoginFailed = true;
             }
         )
+    }
+
+    reloadPage() {
+        window.location.reload();
     }
 }

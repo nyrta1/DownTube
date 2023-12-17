@@ -1,5 +1,6 @@
 package com.example.youdown.security.config;
 
+import com.example.youdown.enums.Role;
 import com.example.youdown.security.custom.CustomUserDetailsService;
 import com.example.youdown.security.jwt.AuthEntryPointJwt;
 import com.example.youdown.security.jwt.AuthTokenFilter;
@@ -51,7 +52,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.POST, SecuritySettings.LOGIN_REGISTER_REQUEST_LIST).permitAll()
                         .requestMatchers(HttpMethod.GET, SecuritySettings.AUTH_TEST_LIST).permitAll()
                         .requestMatchers(HttpMethod.GET, SecuritySettings.YOUTUBE_PARSED_JSON_DATA_SENDER).permitAll()
-                        .requestMatchers(HttpMethod.GET, SecuritySettings.YOUTUBE_MEDIA_FILE_DOWNLOADER_API).permitAll()
+                        .requestMatchers(HttpMethod.GET, SecuritySettings.YOUTUBE_MEDIA_FILE_DOWNLOADER_API).hasAuthority(Role.USER.name())
                         .requestMatchers(HttpMethod.GET, SecuritySettings.ALLOW_ERROR_PAGES_LIST).permitAll()
                         .anyRequest().authenticated()
                 );
@@ -93,7 +94,7 @@ public class SpringSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:4200");
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Cookie", "Set-Cookie", "X-XSRF-TOKEN"));
         configuration.setMaxAge(3600L);
         configuration.setAllowCredentials(true);
 
