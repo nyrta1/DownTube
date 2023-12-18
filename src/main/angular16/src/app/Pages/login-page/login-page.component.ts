@@ -12,8 +12,6 @@ import { TokenStorageService } from 'src/app/services/token-storage/token-storag
 export class LoginPageComponent implements OnInit {
     username: string = "";
     password: string = "";
-    errorMessage: string = "";
-    roles: string[] = [];
     isLoggedIn: boolean = false;
     isLoginFailed = false;
 
@@ -24,7 +22,6 @@ export class LoginPageComponent implements OnInit {
     ngOnInit() {
         if (this.tokenStorage.getToken()) {
           this.isLoggedIn = true;
-          this.roles = this.tokenStorage.getUser()!.roles;
         }
     }
 
@@ -39,12 +36,9 @@ export class LoginPageComponent implements OnInit {
 
                 this.isLoginFailed = false;
                 this.isLoggedIn = true;
-                this.roles = this.tokenStorage.getUser()!.roles;
-                this.reloadPage();
             },
             (error) => {
-                console.log(error);
-                this.errorMessage = error.error;
+                this.isLoggedIn = false;
                 this.isLoginFailed = true;
             }
         )

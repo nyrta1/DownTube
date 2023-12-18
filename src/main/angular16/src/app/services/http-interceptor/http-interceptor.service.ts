@@ -17,25 +17,11 @@ export class HttpAuthInterceptorService implements HttpInterceptor {
         if (token != null) {
             authReq = req.clone({ 
                 setHeaders: {
-                    'Authorization': 'Bearer ' + token,
-                    'X-XSRF-TOKEN': this.getXsrfTokenFromCookie()
+                    'Authorization': 'Bearer ' + token
                 }
             });
         }
         return next.handle(authReq);
-    }
-
-    private getXsrfTokenFromCookie(): string {
-        const xsrfCookie = this.getCookie('XSRF-TOKEN');
-        return xsrfCookie || '';
-    }
-
-    private getCookie(name: string): string {
-        const cookieValue = document.cookie
-            .split('; ')
-            .find(row => row.startsWith(name))
-            ?.split('=')[1];
-        return cookieValue || '';
     }
 }
 
