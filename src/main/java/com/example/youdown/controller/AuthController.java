@@ -10,6 +10,7 @@ import com.example.youdown.services.userservice.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,13 +24,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
-public class UserController {
+public class AuthController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
     @Autowired
-    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+    public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
@@ -72,6 +73,7 @@ public class UserController {
     }
 
     @PostMapping("/validate-jwt-token")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> validateJwtToken(@RequestBody JwtResponse jwtResponse) {
         if (jwtUtils.validateJwtToken(jwtResponse.getToken())) {
             return ResponseEntity.ok("Token is not expired");

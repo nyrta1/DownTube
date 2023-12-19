@@ -1,16 +1,64 @@
 <!-- DOWNLOADER CONTAINER -->
 <div class="container border rounded py-5">
     <h1 class="text-center">Download Video and Audio from ChannelYT</h1>
-    <form action="downloader/channel" method="GET">
+    <form (ngSubmit)="fetchChannelData()" method="GET">
       <div class="input-group rounded px-5 pt-3">
-        <input type="search" class="form-control rounded" name="channelUrl" placeholder="Enter YouTube Channel URL" aria-label="Search" aria-describedby="search-addon" disabled/>
+        <input type="search" class="form-control rounded"  [(ngModel)]="channelUrl" name="channelUrl" placeholder="Enter YouTube Channel URL" aria-label="Search" aria-describedby="search-addon"/>
         <span class="input-group-text border-0" id="search-addon">
-            <button type="submit" class="btn btn-primary" disabled>
+            <button type="submit" class="btn btn-primary" sabled>
               <i class="bi bi-search"></i>
             </button>
           </span>
       </div>
     </form>
-    <p class="text-center text-warning">We have some problems, the functions are temporarily unavailable. We apologize for any inconvenience. 🙂</p>
     <p class="text-center">By using our service you are accepting our <a class="text-danger mb-5" routerLink="/terms-of-use">Terms of Use</a>.</p>
+
+    
+    <div class="d-flex justify-content-center mt-5" *ngIf="dataIsLoading">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
   </div>
+
+  <div class="row px-3 mt-5" *ngIf="showTable">
+      <div class="col-lg-4 col-sm-4">
+          <div class="card">
+              <!--TO GET IMAGE FROM PLAYLIST IS NOT OPTIMIZED WAY-->
+              <img [src]="playlistVideoDetails[0]!.thumbnails" class="card-img-top" alt="Youtube Downloader Video Image" width="257px" height="193">
+              <div class="card-body">
+                  <h5 class="card-title">{{details!.title}}</h5>
+                  <p class="card-text">
+                      <i class="bi bi-eye"></i>
+                      <small class="text-body-secondary"> {{details!.viewCount}} views</small>
+                      <br>
+                      <i class="bi bi-person-bounding-box"></i>
+                      <small class="text-body-secondary"> {{details!.author}}</small>
+                      <br>
+                      <i class="bi bi-film"></i>
+                      <small class="text-body-secondary"> {{details!.videoCount}} videos</small>
+                  </p>
+              </div>
+          </div>
+      </div>
+      <div class="col-lg-8 col-sm-8">
+          <table class="table table-bordered">
+              <thead>
+              <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let playlistVideoDetail of playlistVideoDetails">
+                  <td>{{playlistVideoDetail.index}}</td>
+                  <td>{{playlistVideoDetail.title}}</td>
+                  <td class="text-start">
+                      <a [href]="'http://localhost:4200/all/json/downloader/all!videoUrl=' + playlistVideoDetail.videoId" class="btn btn-success" target="_blank"><i class="bi bi-eye-fill"></i>View</a>
+                  </td>
+              </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>

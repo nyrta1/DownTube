@@ -1,12 +1,16 @@
 <div class="container-fluid">
   <div class="row">
-      <div class="col-lg-2 border-end border-3"></div>
+      <div class="col-lg-2 border-end border-3">
+        <app-download-file-progress></app-download-file-progress>
+      </div>
       <div class="col-lg-8 bg-color5">
         <app-navbar></app-navbar>
         <router-outlet></router-outlet>
         <app-features-page></app-features-page>
         <app-footer-with-other-parts></app-footer-with-other-parts>
       </div>
-      <div class="col-lg-2 border-start border-3"></div>
+      <div class="col-lg-2 border-start border-3">
+        <app-account-info></app-account-info>
+      </div>
   </div>
 </div>

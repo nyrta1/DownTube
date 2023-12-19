@@ -14,4 +14,9 @@ export class PlaylistDownloaderService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.get<any>(`${this.baseUrl}/json/downloader/playlist?playlistUrl=${playlistId}`, { headers });
   }
+
+  getChannelData(channelId: string): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get<any>(`${this.baseUrl}/json/downloader/channel?channelUrl=${channelId}`, { headers });
+  }
 }

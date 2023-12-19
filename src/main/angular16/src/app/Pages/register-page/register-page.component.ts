@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { LoginRequest } from 'src/app/models/login-request';
-import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
-import { UserService } from 'src/app/services/user-service/user-service.service';
 
 @Component({
   selector: 'app-register-page',
