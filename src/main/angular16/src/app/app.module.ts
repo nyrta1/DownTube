@@ -15,8 +15,6 @@ import { TermsOfUsePageComponent } from './Pages/Partials/terms-of-use-page/term
 import { LoginPageComponent } from './Pages/login-page/login-page.component';
 import { RegisterPageComponent } from './Pages/register-page/register-page.component';
 import { authInterceptorProviders } from './services/http-interceptor/http-interceptor.service';
-import { AccountInfoComponent } from './Pages/Partials/account-info/account-info.component';
-import { DownloadFileProgressComponent } from './Pages/Partials/download-file-progress/download-file-progress.component';
 
 @NgModule({
   declarations: [
@@ -29,9 +27,7 @@ import { DownloadFileProgressComponent } from './Pages/Partials/download-file-pr
     FeaturesPageComponent,
     TermsOfUsePageComponent,
     LoginPageComponent,
-    RegisterPageComponent,
-    AccountInfoComponent,
-    DownloadFileProgressComponent
+    RegisterPageComponent
   ],
   imports: [
     BrowserModule,
