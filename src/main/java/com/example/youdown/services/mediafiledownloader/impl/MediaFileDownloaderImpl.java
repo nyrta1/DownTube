@@ -1,12 +1,12 @@
 package com.example.youdown.services.mediafiledownloader.impl;
 
 import com.example.youdown.constants.Constants;
-import com.example.youdown.enums.FileType;
-import com.example.youdown.enums.IndexingFormat;
+import com.example.youdown.models.enums.FileType;
+import com.example.youdown.models.enums.IndexingFormat;
 import com.example.youdown.merger.FFmpegAudioVideoMerger;
 import com.example.youdown.models.ContainerData;
 import com.example.youdown.models.MediaFile;
-import com.example.youdown.services.downloadedhistoryservice.UserDownloadedHistoryService;
+import com.example.youdown.services.historyservice.UserDownloadedHistoryService;
 import com.example.youdown.services.mediafiledownloader.MediaFileDownloader;
 import com.example.youdown.storage.FileFinder;
 import com.example.youdown.storage.HashRamMemory;
@@ -43,39 +43,36 @@ public class MediaFileDownloaderImpl implements MediaFileDownloader {
 
         ContainerData containerData = HashRamMemory.getInstance().getData(dataId);
 
+        File downloadedFile = null;
+        FileType fileType = null;
         switch (indexingFormat) {
             case AUDIO -> {
-                File downloadedFile = downloadAudio(containerData, quality, format, fileName);
-                MediaFile downloadedMediaFile = new MediaFile(
-                        null, dataId, downloadedFile.getPath(), null, quality, FileType.AUDIO
-                );
-                userDownloadedHistoryService.saveToUserHistory(downloadedMediaFile);
+                downloadedFile = downloadAudio(containerData, quality, format, fileName);
+                fileType = FileType.AUDIO;
                 return downloadedFile;
             }
             case VIDEO -> {
-                File downloadedFile = downloadVideo(containerData, quality, format, fileName);
-                MediaFile downloadedMediaFile = new MediaFile(
-                        null, dataId, downloadedFile.getPath(), null, quality, FileType.VIDEO
-                );
-                userDownloadedHistoryService.saveToUserHistory(downloadedMediaFile);
+                downloadedFile = downloadVideo(containerData, quality, format, fileName);
+                fileType = FileType.VIDEO;
                 return downloadedFile;
             }
             case VIDEO_WITH_AUDIO -> {
-                File downloadedFile = downloadVideoWithAudio(containerData, quality, format, fileName);
-                MediaFile downloadedMediaFile = new MediaFile(
-                        null, dataId, downloadedFile.getPath(), null, quality, FileType.VIDEO
-                );
-                userDownloadedHistoryService.saveToUserHistory(downloadedMediaFile);
+                downloadedFile = downloadVideoWithAudio(containerData, quality, format, fileName);
+                fileType = FileType.VIDEO;
                 return downloadedFile;
             }
             case MERGED_AUDIO_WITH_VIDEO -> {
-                File downloadedFile = downloadMergedAudioWithVideo(containerData, dataId, quality, format, fileName);
-                MediaFile downloadedMediaFile = new MediaFile(
-                        null, dataId, downloadedFile.getPath(), null, quality, FileType.VIDEO
-                );
-                userDownloadedHistoryService.saveToUserHistory(downloadedMediaFile);
+                downloadedFile = downloadMergedAudioWithVideo(containerData, dataId, quality, format, fileName);
+                fileType = FileType.VIDEO;
                 return downloadedFile;
             }
+        }
+
+        if (downloadedFile != null) {
+            MediaFile downloadedMediaFile = new MediaFile(
+                    null, dataId, downloadedFile.getPath(), null, quality, fileType
+            );
+            userDownloadedHistoryService.saveToUserHistory(downloadedMediaFile);
         }
 
         return null;

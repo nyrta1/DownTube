@@ -1,6 +1,6 @@
 package com.example.youdown.security.config;
 
-import com.example.youdown.enums.Role;
+import com.example.youdown.models.enums.Role;
 import com.example.youdown.security.custom.CustomUserDetailsService;
 import com.example.youdown.security.jwt.AuthEntryPointJwt;
 import com.example.youdown.security.jwt.AuthTokenFilter;

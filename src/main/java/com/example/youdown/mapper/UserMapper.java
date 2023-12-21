@@ -1,7 +1,7 @@
 package com.example.youdown.mapper;
 
 import com.example.youdown.payload.request.LoginRequest;
-import com.example.youdown.enums.Role;
+import com.example.youdown.models.enums.Role;
 import com.example.youdown.models.UserEntity;
 
 public class UserMapper {

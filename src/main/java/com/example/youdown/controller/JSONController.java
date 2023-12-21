@@ -1,7 +1,7 @@
 package com.example.youdown.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.youdown.enums.RequestData;
+import com.example.youdown.models.enums.RequestData;
 import com.example.youdown.extractors.YouTubeLinkExtractor;
 import com.example.youdown.services.jsonservice.JSONService;
 import lombok.extern.slf4j.Slf4j;

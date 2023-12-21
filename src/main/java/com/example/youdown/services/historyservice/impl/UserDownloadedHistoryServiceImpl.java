@@ -1,10 +1,10 @@
-package com.example.youdown.services.downloadedhistoryservice.impl;
+package com.example.youdown.services.historyservice.impl;
 
 import com.example.youdown.models.MediaFile;
 import com.example.youdown.models.UserEntity;
 import com.example.youdown.repository.MediaFileRepository;
 import com.example.youdown.security.util.SecurityUtil;
-import com.example.youdown.services.downloadedhistoryservice.UserDownloadedHistoryService;
+import com.example.youdown.services.historyservice.UserDownloadedHistoryService;
 import com.example.youdown.services.userservice.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

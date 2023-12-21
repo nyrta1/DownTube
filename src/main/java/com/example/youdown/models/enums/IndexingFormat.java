@@ -1,4 +1,4 @@
-package com.example.youdown.enums;
+package com.example.youdown.models.enums;
 
 public enum IndexingFormat {
     AUDIO("A"),

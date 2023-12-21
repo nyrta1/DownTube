@@ -1,7 +1,7 @@
 package com.example.youdown.services.jsonservice;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.youdown.enums.RequestData;
+import com.example.youdown.models.enums.RequestData;
 
 public interface JSONService {
     // JSON data

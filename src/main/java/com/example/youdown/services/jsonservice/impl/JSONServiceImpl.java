@@ -1,7 +1,7 @@
 package com.example.youdown.services.jsonservice.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.youdown.enums.RequestData;
+import com.example.youdown.models.enums.RequestData;
 import com.example.youdown.models.ContainerData;
 import com.example.youdown.services.jsonservice.JSONService;
 import com.example.youdown.storage.HashRamMemory;

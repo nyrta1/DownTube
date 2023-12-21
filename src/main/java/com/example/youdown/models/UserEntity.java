@@ -1,6 +1,6 @@
 package com.example.youdown.models;
 
-import com.example.youdown.enums.Role;
+import com.example.youdown.models.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

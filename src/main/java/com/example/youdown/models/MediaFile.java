@@ -1,6 +1,6 @@
 package com.example.youdown.models;
 
-import com.example.youdown.enums.FileType;
+import com.example.youdown.models.enums.FileType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

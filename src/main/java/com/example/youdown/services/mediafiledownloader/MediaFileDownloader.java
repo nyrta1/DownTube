@@ -1,6 +1,6 @@
 package com.example.youdown.services.mediafiledownloader;
 
-import com.example.youdown.enums.IndexingFormat;
+import com.example.youdown.models.enums.IndexingFormat;
 
 import java.io.File;
 
