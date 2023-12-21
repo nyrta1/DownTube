@@ -59,6 +59,11 @@ public class ContainerData {
         this.responseStatus = responseStatus;
     }
 
+    public ContainerData(List<PlaylistVideoDetails> playlistVideoDetails, PlaylistDetails playlistDetails) {
+        this.playlistVideoDetails = playlistVideoDetails;
+        this.playlistDetails = playlistDetails;
+    }
+
     public ContainerData(ResponseStatus responseStatus) {
         this.responseStatus = responseStatus;
     }

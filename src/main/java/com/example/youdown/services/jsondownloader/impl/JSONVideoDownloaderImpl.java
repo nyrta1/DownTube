@@ -7,6 +7,7 @@ import com.example.youdown.models.ContainerData;
 import com.example.youdown.services.jsondownloader.JSONVideoDownloader;
 import com.example.youdown.storage.HashRamMemory;
 import com.github.kiulian.downloader.YoutubeDownloader;
+import com.github.kiulian.downloader.downloader.request.RequestChannelUploads;
 import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;
 import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
 import com.github.kiulian.downloader.downloader.response.Response;
@@ -27,7 +28,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class JSONVideoDownloaderImpl implements JSONVideoDownloader {
-
     @Override
     public JSONObject getJsonData(String requestId, RequestData typeRequest) {
         if (requestId == null) {
@@ -46,6 +46,7 @@ public class JSONVideoDownloaderImpl implements JSONVideoDownloader {
         ContainerData containerData = switch (typeRequest) {
             case ALL -> handleVideoRequest(requestId, youtubeDownloader);
             case PLAYLIST -> handlePlaylistRequest(requestId, youtubeDownloader);
+            case CHANNEL -> handleChannelRequest(requestId, youtubeDownloader);
         };
 
         if (containerData.getResponseStatus() == ResponseStatus.completed) {
@@ -87,5 +88,19 @@ public class JSONVideoDownloaderImpl implements JSONVideoDownloader {
         List<PlaylistVideoDetails> list = playlistInfo.videos();
 
         return new ContainerData(list, details, responseStatus);
+    }
+
+    private ContainerData handleChannelRequest(String requestId, YoutubeDownloader youtubeDownloader) {
+        RequestChannelUploads request = new RequestChannelUploads(requestId);
+        Response<PlaylistInfo> response = youtubeDownloader.getChannelUploads(request);
+        ResponseStatus responseStatus = response.status();
+
+        if (!response.ok()){
+            return new ContainerData(responseStatus);
+        }
+
+        PlaylistInfo playlistInfo = response.data();
+
+        return new ContainerData(playlistInfo.videos(), playlistInfo.details());
     }
 }

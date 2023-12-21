@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface UserService {
     void saveUser(UserEntity registerUser);
     Optional<UserEntity> findUser(UserEntity user);
+    Optional<UserEntity> findUserByUsername(String username);
 }

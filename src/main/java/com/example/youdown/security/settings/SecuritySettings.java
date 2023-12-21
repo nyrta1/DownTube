@@ -5,12 +5,14 @@ public class SecuritySettings {
             "/media/download/video-with-audio",
             "/media/download/audio",
             "/media/download/video",
-            "/media/download/merged-audio-with-video"
+            "/media/download/merged-audio-with-video",
+            "/media/download/video-flux"
     };
 
     public final static String[] YOUTUBE_PARSED_JSON_DATA_SENDER = {
             "/json/downloader/all",
-            "/json/downloader/playlist"
+            "/json/downloader/playlist",
+            "/json/downloader/channel"
     };
 
     public final static String[] ALLOW_ERROR_PAGES_LIST = {

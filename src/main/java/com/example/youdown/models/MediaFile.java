@@ -2,6 +2,7 @@ package com.example.youdown.models;
 
 import com.example.youdown.enums.FileType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "MediaFiles")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class MediaFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +24,6 @@ public class MediaFile {
 
     @Column(name = "file_path")
     private String filePath;
-
-    @Column(name = "video_title")
-    private String videoTitle;
 
     @Column(name = "created_at")
     @CreationTimestamp

@@ -37,4 +37,18 @@ public class YouTubeLinkExtractor {
 
         return null;
     }
+
+    public static String extractChannelId(String url) {
+        Pattern pattern = Pattern.compile(
+                "(?:channel/|c/)([A-Za-z0-9_-]{24})"
+        );
+        Matcher matcher = pattern.matcher(url);
+
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+
+        return null;
+    }
+
 }

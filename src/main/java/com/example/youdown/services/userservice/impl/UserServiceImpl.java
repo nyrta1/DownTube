@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService {
     public void saveUser(UserEntity registerUser) {
         try {
             userRepository.save(registerUser);
-            log.info(registerUser.getUsername() + " registered successfully");
         } catch (DataAccessException exception) {
             throw new UserRegistrationException("Could not register user: " + exception.getMessage());
         }
@@ -44,6 +43,16 @@ public class UserServiceImpl implements UserService {
             if (storedPassword.equals(loginPassword)) {
                 return foundUserOptional;
             }
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<UserEntity> findUserByUsername(String username) {
+        Optional<UserEntity> foundUserOptional = userRepository.findByUsername(username);
+
+        if (foundUserOptional.isPresent()) {
+            return foundUserOptional;
         }
         return Optional.empty();
     }

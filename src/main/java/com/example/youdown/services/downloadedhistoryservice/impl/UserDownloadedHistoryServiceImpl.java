@@ -2,25 +2,36 @@ package com.example.youdown.services.downloadedhistoryservice.impl;
 
 import com.example.youdown.models.MediaFile;
 import com.example.youdown.models.UserEntity;
-import com.example.youdown.repository.UserRepository;
+import com.example.youdown.repository.MediaFileRepository;
+import com.example.youdown.security.util.SecurityUtil;
 import com.example.youdown.services.downloadedhistoryservice.UserDownloadedHistoryService;
+import com.example.youdown.services.userservice.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserDownloadedHistoryServiceImpl implements UserDownloadedHistoryService {
-    private UserRepository userRepository;
+    private final UserService userService;
+    private final MediaFileRepository mediaFileRepository;
 
     @Autowired
-    public UserDownloadedHistoryServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserDownloadedHistoryServiceImpl(UserService userService, MediaFileRepository mediaFileRepository) {
+        this.userService = userService;
+        this.mediaFileRepository = mediaFileRepository;
     }
 
     @Override
-    public void saveToUserHistory(UserEntity userEntity, MediaFile response) {
-        MediaFile mediaFile = new MediaFile();
-        userEntity.setDownloadedMedia(List.of());
+    public void saveToUserHistory(MediaFile downloadedFile) {
+        mediaFileRepository.save(downloadedFile);
+        Optional<UserEntity> currentUser = userService.findUserByUsername(
+                SecurityUtil.getSessionUser());
+
+        if (currentUser.isPresent()){
+            UserEntity modifiedUser = currentUser.get();
+            modifiedUser.getDownloadedMedia().add(downloadedFile);
+            userService.saveUser(modifiedUser);
+        }
     }
 }

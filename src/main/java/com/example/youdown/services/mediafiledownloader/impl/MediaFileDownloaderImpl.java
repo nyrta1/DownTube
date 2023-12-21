@@ -1,12 +1,15 @@
 package com.example.youdown.services.mediafiledownloader.impl;
 
 import com.example.youdown.constants.Constants;
+import com.example.youdown.enums.FileType;
 import com.example.youdown.enums.IndexingFormat;
 import com.example.youdown.merger.FFmpegAudioVideoMerger;
 import com.example.youdown.models.ContainerData;
+import com.example.youdown.models.MediaFile;
+import com.example.youdown.services.downloadedhistoryservice.UserDownloadedHistoryService;
 import com.example.youdown.services.mediafiledownloader.MediaFileDownloader;
-import com.example.youdown.services.videodownloader.VideoDownloader;
 import com.example.youdown.storage.FileFinder;
+import com.example.youdown.storage.HashRamMemory;
 import com.github.kiulian.downloader.YoutubeDownloader;
 import com.github.kiulian.downloader.downloader.YoutubeProgressCallback;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
@@ -27,31 +30,51 @@ import java.io.IOException;
 @Service
 @Slf4j
 public class MediaFileDownloaderImpl implements MediaFileDownloader {
-    private final VideoDownloader videoDownloader;
+    private final UserDownloadedHistoryService userDownloadedHistoryService;
 
     @Autowired
-    public MediaFileDownloaderImpl(VideoDownloader videoDownloader) {
-        this.videoDownloader = videoDownloader;
+    public MediaFileDownloaderImpl(UserDownloadedHistoryService userDownloadedHistoryService) {
+        this.userDownloadedHistoryService = userDownloadedHistoryService;
     }
 
     @Override
     public File download(String dataId, String quality, String format, IndexingFormat indexingFormat) {
         String fileName = buildFileName(indexingFormat.getFormatCode(), dataId, quality, format);
 
-        ContainerData containerData = videoDownloader.getAllData(dataId);
+        ContainerData containerData = HashRamMemory.getInstance().getData(dataId);
 
         switch (indexingFormat) {
             case AUDIO -> {
-                return downloadAudio(containerData, quality, format, fileName);
+                File downloadedFile = downloadAudio(containerData, quality, format, fileName);
+                MediaFile downloadedMediaFile = new MediaFile(
+                        null, dataId, downloadedFile.getPath(), null, quality, FileType.AUDIO
+                );
+                userDownloadedHistoryService.saveToUserHistory(downloadedMediaFile);
+                return downloadedFile;
             }
             case VIDEO -> {
-                return downloadVideo(containerData, quality, format, fileName);
+                File downloadedFile = downloadVideo(containerData, quality, format, fileName);
+                MediaFile downloadedMediaFile = new MediaFile(
+                        null, dataId, downloadedFile.getPath(), null, quality, FileType.VIDEO
+                );
+                userDownloadedHistoryService.saveToUserHistory(downloadedMediaFile);
+                return downloadedFile;
             }
             case VIDEO_WITH_AUDIO -> {
-                return downloadVideoWithAudio(containerData, quality, format, fileName);
+                File downloadedFile = downloadVideoWithAudio(containerData, quality, format, fileName);
+                MediaFile downloadedMediaFile = new MediaFile(
+                        null, dataId, downloadedFile.getPath(), null, quality, FileType.VIDEO
+                );
+                userDownloadedHistoryService.saveToUserHistory(downloadedMediaFile);
+                return downloadedFile;
             }
             case MERGED_AUDIO_WITH_VIDEO -> {
-                return downloadMergedAudioWithVideo(containerData, dataId, quality, format, fileName);
+                File downloadedFile = downloadMergedAudioWithVideo(containerData, dataId, quality, format, fileName);
+                MediaFile downloadedMediaFile = new MediaFile(
+                        null, dataId, downloadedFile.getPath(), null, quality, FileType.VIDEO
+                );
+                userDownloadedHistoryService.saveToUserHistory(downloadedMediaFile);
+                return downloadedFile;
             }
         }
 
@@ -174,10 +197,6 @@ public class MediaFileDownloaderImpl implements MediaFileDownloader {
         };
     }
 
-    private void logErrorFormatNotFound() {
-        log.error("Format meeting criteria not found");
-    }
-
     private File downloadMergedRequest(AudioFormat audioFormat, VideoFormat videoFormat, String audioFileName, String videoFileName, String mergedFileName) {
         File downloadedAudioFile = downloadRequest(audioFormat, audioFileName);
         File downloadedVideoFile = downloadRequest(videoFormat, videoFileName);
@@ -198,6 +217,10 @@ public class MediaFileDownloaderImpl implements MediaFileDownloader {
             log.error("Downloaded files are null");
             return null;
         }
+    }
+
+    private void logErrorFormatNotFound() {
+        log.error("Format meeting criteria not found");
     }
 
     private String buildFileName(String indexingFormat, String dataId, String quality, String format) {
