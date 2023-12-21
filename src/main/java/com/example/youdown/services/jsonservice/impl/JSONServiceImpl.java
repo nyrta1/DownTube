@@ -1,10 +1,9 @@
-package com.example.youdown.services.jsondownloader.impl;
+package com.example.youdown.services.jsonservice.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.youdown.converters.JSONConverter;
 import com.example.youdown.enums.RequestData;
 import com.example.youdown.models.ContainerData;
-import com.example.youdown.services.jsondownloader.JSONVideoDownloader;
+import com.example.youdown.services.jsonservice.JSONService;
 import com.example.youdown.storage.HashRamMemory;
 import com.github.kiulian.downloader.YoutubeDownloader;
 import com.github.kiulian.downloader.downloader.request.RequestChannelUploads;
@@ -27,7 +26,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class JSONVideoDownloaderImpl implements JSONVideoDownloader {
+public class JSONServiceImpl implements JSONService {
     @Override
     public JSONObject getJsonData(String requestId, RequestData typeRequest) {
         if (requestId == null) {
@@ -35,6 +34,7 @@ public class JSONVideoDownloaderImpl implements JSONVideoDownloader {
         }
 
         ContainerData dataFromLocalStorage = HashRamMemory.getInstance().getData(requestId);
+
         if (dataFromLocalStorage != null) {
             return JSONConverter.containerDataToJSON(dataFromLocalStorage);
         }
