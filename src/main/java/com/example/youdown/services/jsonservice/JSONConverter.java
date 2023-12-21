@@ -1,4 +1,4 @@
-package com.example.youdown.services.jsonservice.impl;
+package com.example.youdown.services.jsonservice;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;

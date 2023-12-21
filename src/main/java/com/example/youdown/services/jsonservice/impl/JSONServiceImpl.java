@@ -1,32 +1,27 @@
 package com.example.youdown.services.jsonservice.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.youdown.models.enums.RequestData;
 import com.example.youdown.models.ContainerData;
+import com.example.youdown.models.enums.RequestData;
+import com.example.youdown.services.jsonservice.JSONConverter;
 import com.example.youdown.services.jsonservice.JSONService;
+import com.example.youdown.services.youtubedownloaderservice.CustomYoutubeDownloader;
 import com.example.youdown.storage.HashRamMemory;
-import com.github.kiulian.downloader.YoutubeDownloader;
-import com.github.kiulian.downloader.downloader.request.RequestChannelUploads;
-import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;
-import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
-import com.github.kiulian.downloader.downloader.response.Response;
 import com.github.kiulian.downloader.downloader.response.ResponseStatus;
-import com.github.kiulian.downloader.model.playlist.PlaylistDetails;
-import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
-import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
-import com.github.kiulian.downloader.model.videos.VideoDetails;
-import com.github.kiulian.downloader.model.videos.VideoInfo;
-import com.github.kiulian.downloader.model.videos.formats.AudioFormat;
-import com.github.kiulian.downloader.model.videos.formats.VideoFormat;
-import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Slf4j
 public class JSONServiceImpl implements JSONService {
+    private CustomYoutubeDownloader youtubeDownloader;
+
+    @Autowired
+    public JSONServiceImpl(CustomYoutubeDownloader youtubeDownloader) {
+        this.youtubeDownloader = youtubeDownloader;
+    }
+
     @Override
     public JSONObject getJsonData(String requestId, RequestData typeRequest) {
         if (requestId == null) {
@@ -41,12 +36,10 @@ public class JSONServiceImpl implements JSONService {
 
         log.info("Fetching all data from the library for dataID: {}", requestId);
 
-        YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
-
         ContainerData containerData = switch (typeRequest) {
-            case ALL -> handleVideoRequest(requestId, youtubeDownloader);
-            case PLAYLIST -> handlePlaylistRequest(requestId, youtubeDownloader);
-            case CHANNEL -> handleChannelRequest(requestId, youtubeDownloader);
+            case ALL -> youtubeDownloader.parseVideoRequest(requestId);
+            case PLAYLIST -> youtubeDownloader.parsePlaylistRequest(requestId);
+            case CHANNEL -> youtubeDownloader.parseChannelRequest(requestId);
         };
 
         if (containerData.getResponseStatus() == ResponseStatus.completed) {
@@ -54,53 +47,5 @@ public class JSONServiceImpl implements JSONService {
         }
 
         return JSONConverter.containerDataToJSON(containerData);
-    }
-
-    private ContainerData handleVideoRequest(String requestId, YoutubeDownloader youtubeDownloader) {
-        RequestVideoInfo request = new RequestVideoInfo(requestId);
-        Response<VideoInfo> response = youtubeDownloader.getVideoInfo(request);
-        ResponseStatus responseStatus = response.status();
-
-        if (!response.ok()) {
-            return new ContainerData(responseStatus);
-        }
-
-        VideoInfo video = response.data();
-        List<VideoWithAudioFormat> videoWithAudioFormatList = video.videoWithAudioFormats();
-        List<VideoFormat> videoFormatList = video.videoFormats();
-        List<AudioFormat> audioFormats = video.audioFormats();
-        VideoDetails videoDetails = video.details();
-
-        return new ContainerData(videoWithAudioFormatList, videoFormatList, audioFormats, videoDetails, responseStatus);
-    }
-
-    private ContainerData handlePlaylistRequest(String requestId, YoutubeDownloader youtubeDownloader) {
-        RequestPlaylistInfo request = new RequestPlaylistInfo(requestId);
-        Response<PlaylistInfo> response = youtubeDownloader.getPlaylistInfo(request);
-        ResponseStatus responseStatus = response.status();
-
-        if (!response.ok()) {
-            return new ContainerData(responseStatus);
-        }
-
-        PlaylistInfo playlistInfo = response.data();
-        PlaylistDetails details = playlistInfo.details();
-        List<PlaylistVideoDetails> list = playlistInfo.videos();
-
-        return new ContainerData(list, details, responseStatus);
-    }
-
-    private ContainerData handleChannelRequest(String requestId, YoutubeDownloader youtubeDownloader) {
-        RequestChannelUploads request = new RequestChannelUploads(requestId);
-        Response<PlaylistInfo> response = youtubeDownloader.getChannelUploads(request);
-        ResponseStatus responseStatus = response.status();
-
-        if (!response.ok()){
-            return new ContainerData(responseStatus);
-        }
-
-        PlaylistInfo playlistInfo = response.data();
-
-        return new ContainerData(playlistInfo.videos(), playlistInfo.details());
     }
 }
